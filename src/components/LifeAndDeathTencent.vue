@@ -170,9 +170,7 @@
         </svg>
       </div>
 
-      <div class="discription">
-        *符号“//”一般用于数据差异过大时隔断坐标轴
-      </div>
+      <div class="discription">*符号“//”一般用于数据差异过大时隔断坐标轴</div>
     </div>
 
     <div id="add" style="margin-top: 10vw;">
@@ -259,7 +257,7 @@
               <g id="line-chart">
                 <path
                   :d="cure_rect_path"
-                  stroke-dasharray="0.4vw, 0.4vw"
+                  stroke-dasharray="0.4vw 0.4vw"
                   style="stroke: #62c298; stroke-width: 0.2vw; fill: none;"
                 />
                 <path
@@ -279,7 +277,7 @@
                 />
                 <path
                   :d="death_rect_path"
-                  stroke-dasharray="0.4vw, 0.4vw"
+                  stroke-dasharray="0.4vw 0.4vw"
                   style="stroke: #333333; stroke-width: 0.2vw; fill: none;"
                 />
                 <path
@@ -375,16 +373,14 @@
       <div id="slider">
         <svg id="slider_svg" width="100%" height="100%">
           <defs>
-            <filter id="shadow" x="-50%" y="-50%"  width="200%" height="200%">
-              <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#00bad1"/>
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#00bad1" />
             </filter>
           </defs>
         </svg>
       </div>
 
-      <div class="discription" style="margin-left: 3vw;">
-        *拖动图表查看早期数据，移动滑块选择具体日期，条形图也会随日期变化
-      </div>
+      <div class="discription" style="margin-left: 3vw;">*拖动图表查看早期数据，移动滑块选择具体日期，条形图也会随日期变化</div>
 
       <div id="footer" style="height: 30vw;"></div>
     </div>
@@ -429,7 +425,7 @@ export default {
       max_scroll_distance: 0,
       gap: 0,
       hightlight_rect: {},
-      bold_line_index_list: [0, 1, 4, 5],
+      bold_line_index_list: [0, 1, 4, 5]
     };
   },
   watch: {
@@ -446,10 +442,12 @@ export default {
           svg_width -
           this.add_x_end -
           width / 2 -
-          (this.showLens - 1 - this.select_date_id_slider) * 2 * this.add_x_step -
+          (this.showLens - 1 - this.select_date_id_slider) *
+            2 *
+            this.add_x_step -
           this.add_x_step * 1;
         let y = this.add_y_step * 0.5;
-        this.hightlight_rect =  {
+        this.hightlight_rect = {
           x,
           y,
           width,
@@ -803,6 +801,176 @@ export default {
       this.set_slider();
       // console.log('slider is ok')
     },
+    async getCountryDataset(test_url, month_begin = 1, day_begin = 1) {
+      let body = {
+        args: {
+          req: {
+            none: ""
+          }
+        },
+        service: "THOuterDataServer",
+        func: "getAreaInfo"
+      };
+      let request = {
+        method: "POST",
+        headers: [["Content-Type", "application/json"]],
+        body: JSON.stringify(body)
+      };
+      let data = await d3.json(test_url, request);
+      // console.log(data.args.rsp);
+      let country_data = data.args.rsp;
+      let country_dataset = [];
+      country_data.chinaHistoryTotal.forEach(d => {
+        let day = +d["day"].split(".")[1];
+        let month = +d["day"].split(".")[0];
+        if (month > month_begin || (month == month_begin && day >= day_begin)) {
+          country_dataset.push({
+            total_cure: d.heal,
+            total_death: d.dead,
+            total_diagnosis: d.confirm,
+            cure_rate: d.heal / d.confirm,
+            death_rate: d.dead / d.confirm,
+            month,
+            day
+          });
+        }
+      });
+      country_data.modifyHistoryTotal.forEach((d, i) => {
+        let day = +d["day"].split(".")[1];
+        let month = +d["day"].split(".")[0];
+        if (month > month_begin || (month == month_begin && day >= day_begin)) {
+          country_dataset[i]["cure"] = d.heal;
+          country_dataset[i]["death"] = d.dead;
+        }
+      });
+      return country_dataset;
+    },
+    async getHubeiDataset(test_url, month_begin = 1, day_begin = 1) {
+      let body = {
+        args: {
+          req: {
+            area: "湖北"
+          }
+        },
+        service: "THOuterDataServer",
+        func: "getCityInfo"
+      };
+      let request = {
+        method: "POST",
+        headers: [["Content-Type", "application/json"]],
+        body: JSON.stringify(body)
+      };
+      let data = await d3.json(test_url, request);
+      // console.log(data.args.rsp, month_begin, day_begin);
+      let hubei_dataset = [];
+      data.args.rsp.areaHistory.forEach(d => {
+        let day = +d["day"].split(".")[1];
+        let month = +d["day"].split(".")[0];
+        if (month > month_begin || (month == month_begin && day >= day_begin)) {
+          hubei_dataset.push({
+            total_cure: d.heal,
+            total_death: d.dead,
+            total_diagnosis: d.confirm
+          });
+        }
+      });
+      return hubei_dataset;
+    },
+    async getWuhanDataset(test_url, month_begin = 1, day_begin = 1) {
+      let body = {
+        args: {
+          req: {
+            area: "湖北"
+          }
+        },
+        service: "THOuterDataServer",
+        func: "getKeyCity"
+      };
+      let request = {
+        method: "POST",
+        headers: [["Content-Type", "application/json"]],
+        body: JSON.stringify(body)
+      };
+      let data = await d3.json(test_url, request);
+      console.log(data.args.rsp.cityHistory[0], month_begin, day_begin);
+      let wuhan_dataset = [];
+      data.args.rsp.cityHistory[0].history.forEach(d => {
+        let day = +d["day"].split(".")[1];
+        let month = +d["day"].split(".")[0];
+        if (month > month_begin || (month == month_begin && day >= day_begin)) {
+          wuhan_dataset.push({
+            total_cure: d.heal,
+            total_death: d.dead,
+            total_diagnosis: d.confirm
+          });
+        }
+      });
+      return wuhan_dataset;
+    },
+    async initData_tencent(isTest = 1) {
+      // this.country_dataset = this.getCountryDataset()
+      let test_url = "https://ehcard-test.wecity.qq.com/api";
+      let formal_url = "https://wechat.wecity.qq.com/api";
+      let url = isTest ? test_url : formal_url;
+      Promise.all([
+        this.getCountryDataset(url),
+        this.getHubeiDataset(url),
+        this.getWuhanDataset(url)
+      ]).then(d => {
+        this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
+        let country_dataset = d[0].splice(
+          d[0].length - this.dataLens,
+          this.dataLens
+        );
+        console.log('country_dataset', country_dataset)
+        let hubei_dataset = d[1].splice(
+          d[1].length - this.dataLens,
+          this.dataLens
+        );
+        console.log('hubei_dataset', hubei_dataset)
+        let wuhan_dataset = d[2].splice(
+          d[2].length - this.dataLens,
+          this.dataLens
+        );
+        console.log('wuhan_dataset', wuhan_dataset)
+
+        let total_dataset = [];
+        country_dataset.forEach((country_data, index) => {
+          let wuhan_data = wuhan_dataset[index];
+          let hubei_data = hubei_dataset[index];
+
+          let wuhan = {
+            title_1: "武汉",
+            title_2: "",
+            death: wuhan_data["total_death"],
+            cure: wuhan_data["total_cure"],
+            diagnosis: wuhan_data["total_diagnosis"]
+          };
+
+          let hubei_not_wuhan = {
+            title_1: "湖北",
+            title_2: "(除武汉)",
+            death: hubei_data["total_death"] - wuhan_data["total_death"],
+            cure: hubei_data["total_cure"] - wuhan_data["total_cure"],
+            diagnosis:
+              hubei_data["total_diagnosis"] - wuhan_data["total_diagnosis"]
+          };
+
+          let country_not_hubei = {
+            title_1: "全国",
+            title_2: "(除湖北)",
+            death: country_data["total_death"] - hubei_data["total_death"],
+            cure: country_data["total_cure"] - hubei_data["total_cure"],
+            diagnosis:
+              country_data["total_diagnosis"] - hubei_data["total_diagnosis"]
+          };
+
+          total_dataset.push([wuhan, hubei_not_wuhan, country_not_hubei]);
+        });
+
+        console.log('total_dataset', total_dataset)
+      });
+    },
     set_slider() {
       let that = this;
       let DRAGWIDTH = d3
@@ -833,18 +1001,18 @@ export default {
         let h = height * 0.8;
         let timeScale = d3
           .scaleLinear()
-          .range([-0.2*w, width - w * 1.2])
+          .range([-0.2 * w, width - w * 1.2])
           .domain([0, total - 1]);
         let g = canvas.append("g");
         g.append("line")
-          .attr('x1', -width * 0.02)
-          .attr("x2", width + 0.22*w)
+          .attr("x1", -width * 0.02)
+          .attr("x2", width + 0.22 * w)
           .attr("y1", height * 0.5)
           .attr("y2", height * 0.5)
-          .style('stroke', '#ececec')
-          .style('stroke-width', height * 0.2)
-          .style('stroke-linecap', 'round')
-          // .classed("slider-container", true);
+          .style("stroke", "#ececec")
+          .style("stroke-width", height * 0.2)
+          .style("stroke-linecap", "round");
+        // .classed("slider-container", true);
         let target = g
           .append("rect")
           .attr("x", w * total - w * 1.2)
@@ -854,38 +1022,42 @@ export default {
           .attr("rx", w * 0.2)
           .attr("ry", w * 0.2)
           .classed("slider-rect", true);
-        let bar_g = g.append('g')
-        let bars = [0, 1, 2]
-        bar_g.selectAll('rect')
+        let bar_g = g.append("g");
+        let bars = [0, 1, 2];
+        bar_g
+          .selectAll("rect")
           .data(bars)
           .enter()
           .append("rect")
-          .attr('class', 'bar_g')
-          .attr("x", (d, i) => {return w * total - w * 1.2 + w * 0.43 + i * 0.25 * w})
+          .attr("class", "bar_g")
+          .attr("x", (d, i) => {
+            return w * total - w * 1.2 + w * 0.43 + i * 0.25 * w;
+          })
           .attr("y", height / 2 - h * 0.23)
           .attr("width", 0.04 * w)
           .attr("height", 0.46 * h)
-          .style('fill', 'white')
+          .style("fill", "white")
           .attr("rx", 0.02 * w)
-          .attr("ry", 0.02 * w)
+          .attr("ry", 0.02 * w);
         target.call(
           d3
             .drag()
             .on("drag", function() {
-              let x = Math.min(Math.max(-0.2*w, d3.event.x), width - w * 1.2);
+              let x = Math.min(Math.max(-0.2 * w, d3.event.x), width - w * 1.2);
               let self = d3.select(this);
               self.attr("x", x);
               let timeIdx = Math.round(timeScale.invert(x));
               let position = timeIdx * w - 0.2 * w;
               self.attr("x", position);
-              d3.selectAll(".bar_g")
-                .attr("transform", `translate(${(timeIdx - total + 1) * w}, 0)`)
+              d3.selectAll(".bar_g").attr(
+                "transform",
+                `translate(${(timeIdx - total + 1) * w}, 0)`
+              );
               that.select_date_id_slider = timeIdx;
               that.select_date_id =
                 that.select_date_id_slider + that.select_date_id_bar;
             })
-            .on("end", function() {
-            })
+            .on("end", function() {})
         );
       };
       this.select_date_id_slider = this.showLens - 1;
@@ -896,6 +1068,7 @@ export default {
   },
   mounted() {
     this.initData_pku();
+    // this.initData_tencent();
     let that = this;
     let timer = null;
     $(".life_svg_div").scroll(function() {
@@ -1167,7 +1340,7 @@ export default {
       // background: rgba(142, 170, 142, 0.1);
       overflow-x: scroll;
       overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
+      // -webkit-overflow-scrolling: touch;
       // overflow-y: hidden;
       direction: rtl;
       text-align: center;
@@ -1210,5 +1383,4 @@ export default {
   fill: #00bad1;
   filter: url(#shadow);
 }
-
 </style>

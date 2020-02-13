@@ -1,17 +1,21 @@
 <template>
   <div id="app">
     <div id="min_div">
-      <life-and-death-tencent/>
+      <life-and-death-tencent />
     </div>
   </div>
 </template>
 
 <script>
-import LifeAndDeathTencent from "./components/LifeAndDeathTencent"
+// import * as d3 from "d3";
+import LifeAndDeathTencent from "./components/LifeAndDeathTencent";
 export default {
   name: "app",
   components: {
     LifeAndDeathTencent
+  },
+  data() {
+    return {};
   },
   mounted: function() {
   }
