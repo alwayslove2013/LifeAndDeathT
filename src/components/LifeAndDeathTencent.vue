@@ -2,30 +2,32 @@
   <div id="container">
     <div id="head">
       <div id="left_border" />
-      <div id="title">新冠肺炎疫情生死线</div>
-      <div id="description">(7:00-10:00为更新高峰，数据有滞后请谅解)</div>
+      <div id="title">
+        新冠肺炎疫情生命线
+      </div>
+      <div id="description">(7:00-10:00左右为数据更新高峰，显示可能略有滞后请谅解)</div>
     </div>
 
-    <div id="explanation">
-      <div id="explanation_text">病亡率为该地区公布的病亡人数在确诊人数中的占比；治愈率为该地区治愈人数在确诊人数中的占比。</div>
-    </div>
+    <!-- <div id="explanation">
+      <div id="explanation_text">治愈率为该地区治愈人数在确诊人数中的占比。死亡率为该地区公布的死亡人数在确诊人数中的占比；</div>
+    </div> -->
 
     <div id="total">
       <div
         class="title"
-      >各地区累计治愈/病亡人数（{{date_list[select_date_id] ? date_list[select_date_id].month : ''}}月{{date_list[select_date_id] ? date_list[select_date_id].day : ''}}日）</div>
+      >各地区累计治愈/死亡病例数（{{date_list[select_date_id] ? date_list[select_date_id].month : ''}}月{{date_list[select_date_id] ? date_list[select_date_id].day : ''}}日）</div>
       <div id="legend">
         <div class="legend_part">
           <div class="death icon" />
-          <div class="legend_text">病亡人数</div>
+          <div class="legend_text">累计死亡</div>
         </div>
         <div class="legend_part">
           <div class="cure icon" />
-          <div class="legend_text">治愈人数</div>
+          <div class="legend_text">累计治愈</div>
         </div>
         <div class="legend_part">
           <div class="diagnosis icon" />
-          <div class="legend_text">确诊人数</div>
+          <div class="legend_text">累计确诊</div>
         </div>
       </div>
 
@@ -39,10 +41,8 @@
               :d="index===(total_x_label[select_date_id].length - 1) ? `M${total_x_begin + (index+0.5)*total_x_step},5v${total_svg_height * 0.86}` : `M${total_x_begin + index*total_x_step},5v${total_svg_height * 0.86}`"
             />
           </g>
-          <g
-            class="x_label"
-            :style="`transform: translate(${total_x_begin}px, ${total_svg_height}px);`"
-          >
+          <g class="x_label"
+            :style="`transform: translate(${total_x_begin}px, ${total_svg_height}px);`">
             <text
               v-for="(label, index) in total_x_label[select_date_id]"
               class="label_text"
@@ -57,7 +57,7 @@
           <g
             v-for="(data, index) in total_dataset[select_date_id]"
             :key="data.title_1"
-            :style="`transform: translate(0, ${total_svg_height * 0.28 * index}px);`"
+            :style="`transform: translate(0, ${total_svg_height * 0.4 * index}px);`"
           >
             <text style="transform: translate(0, 4vw)">
               <tspan x="2vw" font-size="3.2vw" font-weight="500">{{data.title_1}}</tspan>
@@ -170,11 +170,11 @@
         </svg>
       </div>
 
-      <div class="discription">*符号“//”一般用于数据差异过大时隔断坐标轴</div>
+      <div class="description">*锯齿线用于数据差异过大时隔断坐标轴</div>
     </div>
 
     <div id="add" style="margin-top: 10vw;">
-      <div class="title">全国新增治愈/病亡人数</div>
+      <div class="title">全国新增治愈/死亡病例数</div>
       <div id="legend" style="margin-top: 3vw;">
         <div class="legend_part">
           <div class="legend_line_cure"></div>
@@ -184,15 +184,15 @@
         <div class="legend_part">
           <div class="legend_line_death"></div>
           <div class="legend_icon_line death"></div>
-          <div class="legend_text_line">病亡率</div>
+          <div class="legend_text_line">病死率</div>
         </div>
         <div class="legend_part">
           <div class="legend_icon cure"></div>
-          <div class="legend_text">治愈人数</div>
+          <div class="legend_text">累计治愈</div>
         </div>
         <div class="legend_part">
           <div class="legend_icon death"></div>
-          <div class="legend_text">病亡人数</div>
+          <div class="legend_text">累计死亡</div>
         </div>
       </div>
 
@@ -373,16 +373,21 @@
       <div id="slider">
         <svg id="slider_svg" width="100%" height="100%">
           <defs>
-            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-              <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#00bad1" />
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0.5" dy="1" stdDeviation="1.4" flood-color="#00B9D1"/>
             </filter>
           </defs>
         </svg>
       </div>
 
-      <div class="discription" style="margin-left: 3vw;">*拖动图表查看早期数据，移动滑块选择具体日期，条形图也会随日期变化</div>
+      <div class="description" style="margin-left: 2vw;">*滑动图表查看更多时间范围数据，移动滑块选择不同日期，条形图也会同步变化</div>
 
-      <div id="footer" style="height: 10vw;"></div>
+      <div id="footer" style="height: 10vw;">
+        <p>scroll-left: {{scroll_left}};</p>
+        <p>select_date_id: {{select_date_id}}</p>
+        <p>select_date_id_bar: {{select_date_id_bar}}</p>
+        <p>select_date_id_slider: {{select_date_id_slider}}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -425,7 +430,8 @@ export default {
       max_scroll_distance: 0,
       gap: 0,
       hightlight_rect: {},
-      bold_line_index_list: [0, 1, 4, 5]
+      bold_line_index_list: [0, 1, 4, 5],
+      scroll_left: 0,
     };
   },
   watch: {
@@ -541,7 +547,7 @@ export default {
         .select(".life_svg_div")
         .node()
         .getBoundingClientRect();
-      console.log(".life_svg_div", tmp)
+      // console.log(".life_svg_div", tmp)
       let add_svg_div_rect = d3
         .select(".life_svg_div_big")
         .node()
@@ -552,8 +558,8 @@ export default {
       this.add_y_step = this.add_svg_height / 9.5;
       this.add_x_step = this.add_svg_width / 2 / (this.dataLens + 0.5);
       this.add_x_end = this.add_svg_width - 2 * this.dataLens * this.add_x_step;
-      console.log('add_svg_div_rect', add_svg_div_rect);
-      console.log('this.add_x_step', this.add_x_step)
+      // console.log('add_svg_div_rect', add_svg_div_rect);
+      // console.log('this.add_x_step', this.add_x_step)
     },
     compute_total_x_label(dataset) {
       let total_x_label = [];
@@ -604,7 +610,7 @@ export default {
       max_rate = Math.ceil((max_rate * 100) / 5) * 5;
       max_cure = Math.ceil(max_cure / 400) * 400;
       max_death = Math.ceil(max_death / 400) * 400;
-      console.log(max_rate, max_cure, max_death);
+      // console.log(max_rate, max_cure, max_death);
       this.add_y_label = [
         max_rate,
         0,
@@ -825,7 +831,6 @@ export default {
         body: JSON.stringify(body)
       };
       let data = await d3.json(test_url, request);
-      console.log(data.args.rsp, data.args.rsp);
       let country_data = data.args.rsp;
       let country_dataset = [];
       country_data.chinaHistoryTotal.forEach(d => {
@@ -900,7 +905,7 @@ export default {
         body: JSON.stringify(body)
       };
       let data = await d3.json(test_url, request);
-      console.log(data.args.rsp.cityHistory[0], month_begin, day_begin);
+      // console.log(data.args.rsp.cityHistory[0], month_begin, day_begin);
       let wuhan_dataset = [];
       data.args.rsp.cityHistory[0].history.forEach(d => {
         let day = +d["day"].split(".")[1];
@@ -915,30 +920,28 @@ export default {
       });
       return wuhan_dataset;
     },
-    getTotalDatatest(country_dataset, hubei_dataset, wuhan_dataset) {
+    getTotalDatatest(country_dataset, hubei_dataset) {
       let total_dataset = [];
       country_dataset.forEach((country_data, index) => {
-        let wuhan_data = wuhan_dataset[index];
+        // let wuhan_data = wuhan_dataset[index];
         let hubei_data = hubei_dataset[index];
 
-        let wuhan = {
-          title_1: "武汉",
-          title_2: "",
-          death: wuhan_data["total_death"],
-          cure: wuhan_data["total_cure"],
-          diagnosis: wuhan_data["total_diagnosis"]
-        };
+        // let wuhan = {
+        //   title_1: "武汉",
+        //   title_2: "",
+        //   death: wuhan_data["total_death"],
+        //   cure: wuhan_data["total_cure"],
+        //   diagnosis: wuhan_data["total_diagnosis"]
+        // };
 
         let hubei_not_wuhan = {
           title_1: "湖北",
-          title_2: "(除武汉)",
-          death: hubei_data["total_death"] - wuhan_data["total_death"],
+          title_2: "",
+          death: hubei_data["total_death"],
           cure:
-            hubei_data["total_cure"] - wuhan_data["total_cure"] < 0
-              ? 0
-              : hubei_data["total_cure"] - wuhan_data["total_cure"],
+            hubei_data["total_cure"],
           diagnosis:
-            hubei_data["total_diagnosis"] - wuhan_data["total_diagnosis"]
+            hubei_data["total_diagnosis"]
         };
 
         let country_not_hubei = {
@@ -950,7 +953,7 @@ export default {
             country_data["total_diagnosis"] - hubei_data["total_diagnosis"]
         };
 
-        total_dataset.push([wuhan, hubei_not_wuhan, country_not_hubei]);
+        total_dataset.push([hubei_not_wuhan, country_not_hubei]);
       });
       return total_dataset;
     },
@@ -965,7 +968,7 @@ export default {
         this.getWuhanDataset(url)
       ]).then(d => {
         this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
-        console.log("dataLens", this.dataLens)
+        // console.log("dataLens", this.dataLens)
         let country_dataset = d[0].splice(
           d[0].length - this.dataLens,
           this.dataLens
@@ -1011,7 +1014,7 @@ export default {
       clearTimeout(timer);
       // console.log("???");
       // console.log(this.scrollLeft);
-      that.test = this.scrollLeft;
+      that.scroll_left = this.scrollLeft;
       let tmp = this.scrollLeft;
       that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
       that.gap = that.max_scroll_distance - tmp;
@@ -1022,7 +1025,7 @@ export default {
       timer = setTimeout(
         tmp => {
           // console.log(tmp);
-          if (tmp === that.test) {
+          if (tmp === that.scroll_left) {
             that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
             that.gap = that.max_scroll_distance - tmp;
             let t = Math.round(that.gap / (that.add_x_step * 2));
@@ -1232,23 +1235,25 @@ export default {
   margin-top: 40 /7.5vw;
   vertical-align: middle;
   #left_border {
-    margin-top: 6 /7.5vw;
-    height: 34 /7.5vw;
+    // position: absolute;
+    margin-top: 1.20vw;
+    float: left;
+    height: 4.8vw;
     width: 7 /7.5vw;
     border-radius: 3.5 /7.5vw;
     background: #00bad1;
-    float: left;
   }
   #title {
-    margin-left: 16 /7.5vw;
+    padding-left: 16 /7.5vw;
     font-size: 40 /7.5vw;
     font-weight: 600;
     color: #333333;
+    // border-left: 1vw solid #00bad1;
   }
   #description {
-    margin-top: 5 /7.5vw;
+    margin-top: 1vw;
     margin-left: 18 /7.5vw;
-    font-size: 20 /7.5vw;
+    font-size: 2.8vw;
     color: #888888;
   }
 }
@@ -1272,7 +1277,7 @@ export default {
   }
 }
 
-.discription {
+.description {
   margin-top: 2vw;
   margin-left: 1.5vw;
   color: #b2b2b2;
@@ -1305,7 +1310,7 @@ export default {
   #total_svg_div {
     margin-top: 4vw;
     width: 100%;
-    height: 40vw;
+    height: 25vw;
     // background: rgba(142, 170, 142, 0.2);
     // #total_svg {
 

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-// import * as d3 from "d3";
+import * as d3 from "d3";
 import LifeAndDeathTencent from "./components/LifeAndDeathTencent";
 export default {
   name: "app",
@@ -18,22 +18,17 @@ export default {
     return {};
   },
   mounted: function() {
+    let ua = navigator.userAgent.toLowerCase();
+    let fontFamily = "Roboto, SourceHanSansCN, “思源黑体”, Noto Sans SC";
+    if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
+      fontFamily = "PingFang SC";
+    }
+    d3.select("body").style("font-family", fontFamily);
   }
 };
 </script>
 
 <style lang="less">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-}
-
 #min_div {
   // position: absolute;
   left: 0;
