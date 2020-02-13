@@ -43,6 +43,5 @@ export default {
   // border: 1px solid red;
   text-align: center;
   // height: 100%;
-  overflow: hidden;
 }
 </style>

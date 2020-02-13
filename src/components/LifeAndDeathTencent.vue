@@ -382,7 +382,7 @@
 
       <div class="discription" style="margin-left: 3vw;">*拖动图表查看早期数据，移动滑块选择具体日期，条形图也会随日期变化</div>
 
-      <div id="footer" style="height: 30vw;"></div>
+      <div id="footer" style="height: 10vw;"></div>
     </div>
   </div>
 </template>
@@ -537,16 +537,23 @@ export default {
         (this.total_x_label[0] ? this.total_x_label[0].length : 1);
     },
     set_add_svg_params() {
+      let tmp = d3
+        .select(".life_svg_div")
+        .node()
+        .getBoundingClientRect();
+      console.log(".life_svg_div", tmp)
       let add_svg_div_rect = d3
         .select(".life_svg_div_big")
         .node()
         .getBoundingClientRect();
-      this.add_svg_width = add_svg_div_rect.width;
+      this.add_svg_width = tmp.width * this.dataLens / this.showLens;
+      // this.add_svg_width = add_svg_div_rect.width;
       this.add_svg_height = add_svg_div_rect.height;
       this.add_y_step = this.add_svg_height / 9.5;
       this.add_x_step = this.add_svg_width / 2 / (this.dataLens + 0.5);
       this.add_x_end = this.add_svg_width - 2 * this.dataLens * this.add_x_step;
-      // console.log(add_svg_div_rect);
+      console.log('add_svg_div_rect', add_svg_div_rect);
+      console.log('this.add_x_step', this.add_x_step)
     },
     compute_total_x_label(dataset) {
       let total_x_label = [];
@@ -585,6 +592,7 @@ export default {
       let max_rate = 0;
       let max_cure = 0;
       let max_death = 0;
+      // console.log('this.country_dataset', this.country_dataset)
       this.country_dataset.forEach(data => {
         if (max_rate < data.cure_rate) max_rate = data.cure_rate;
         if (max_rate < data.death_rate) max_rate = data.death_rate;
@@ -596,7 +604,7 @@ export default {
       max_rate = Math.ceil((max_rate * 100) / 5) * 5;
       max_cure = Math.ceil(max_cure / 400) * 400;
       max_death = Math.ceil(max_death / 400) * 400;
-      // console.log(max_rate, max_cure, max_death);
+      console.log(max_rate, max_cure, max_death);
       this.add_y_label = [
         max_rate,
         0,
@@ -801,7 +809,7 @@ export default {
       this.set_slider();
       // console.log('slider is ok')
     },
-    async getCountryDataset(test_url, month_begin = 1, day_begin = 1) {
+    async getCountryDataset(test_url, month_begin = 1, day_begin = 20) {
       let body = {
         args: {
           req: {
@@ -817,7 +825,7 @@ export default {
         body: JSON.stringify(body)
       };
       let data = await d3.json(test_url, request);
-      // console.log(data.args.rsp);
+      console.log(data.args.rsp, data.args.rsp);
       let country_data = data.args.rsp;
       let country_dataset = [];
       country_data.chinaHistoryTotal.forEach(d => {
@@ -907,7 +915,46 @@ export default {
       });
       return wuhan_dataset;
     },
-    async initData_tencent(isTest = 1) {
+    getTotalDatatest(country_dataset, hubei_dataset, wuhan_dataset) {
+      let total_dataset = [];
+      country_dataset.forEach((country_data, index) => {
+        let wuhan_data = wuhan_dataset[index];
+        let hubei_data = hubei_dataset[index];
+
+        let wuhan = {
+          title_1: "武汉",
+          title_2: "",
+          death: wuhan_data["total_death"],
+          cure: wuhan_data["total_cure"],
+          diagnosis: wuhan_data["total_diagnosis"]
+        };
+
+        let hubei_not_wuhan = {
+          title_1: "湖北",
+          title_2: "(除武汉)",
+          death: hubei_data["total_death"] - wuhan_data["total_death"],
+          cure:
+            hubei_data["total_cure"] - wuhan_data["total_cure"] < 0
+              ? 0
+              : hubei_data["total_cure"] - wuhan_data["total_cure"],
+          diagnosis:
+            hubei_data["total_diagnosis"] - wuhan_data["total_diagnosis"]
+        };
+
+        let country_not_hubei = {
+          title_1: "全国",
+          title_2: "(除湖北)",
+          death: country_data["total_death"] - hubei_data["total_death"],
+          cure: country_data["total_cure"] - hubei_data["total_cure"],
+          diagnosis:
+            country_data["total_diagnosis"] - hubei_data["total_diagnosis"]
+        };
+
+        total_dataset.push([wuhan, hubei_not_wuhan, country_not_hubei]);
+      });
+      return total_dataset;
+    },
+    initData_tencent(isTest = 0) {
       // this.country_dataset = this.getCountryDataset()
       let test_url = "https://ehcard-test.wecity.qq.com/api";
       let formal_url = "https://wechat.wecity.qq.com/api";
@@ -918,57 +965,81 @@ export default {
         this.getWuhanDataset(url)
       ]).then(d => {
         this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
+        console.log("dataLens", this.dataLens)
         let country_dataset = d[0].splice(
           d[0].length - this.dataLens,
           this.dataLens
         );
-        console.log('country_dataset', country_dataset)
+        this.country_dataset = country_dataset;
+        // console.log("country_dataset", country_dataset);
         let hubei_dataset = d[1].splice(
           d[1].length - this.dataLens,
           this.dataLens
         );
-        console.log('hubei_dataset', hubei_dataset)
+        // console.log("hubei_dataset", hubei_dataset);
         let wuhan_dataset = d[2].splice(
           d[2].length - this.dataLens,
           this.dataLens
         );
-        console.log('wuhan_dataset', wuhan_dataset)
+        // console.log("wuhan_dataset", wuhan_dataset);
 
-        let total_dataset = [];
-        country_dataset.forEach((country_data, index) => {
-          let wuhan_data = wuhan_dataset[index];
-          let hubei_data = hubei_dataset[index];
+        let total_dataset = this.getTotalDatatest(
+          country_dataset,
+          hubei_dataset,
+          wuhan_dataset
+        );
+        // console.log("total_dataset", total_dataset);
+        this.total_dataset = total_dataset;
 
-          let wuhan = {
-            title_1: "武汉",
-            title_2: "",
-            death: wuhan_data["total_death"],
-            cure: wuhan_data["total_cure"],
-            diagnosis: wuhan_data["total_diagnosis"]
-          };
-
-          let hubei_not_wuhan = {
-            title_1: "湖北",
-            title_2: "(除武汉)",
-            death: hubei_data["total_death"] - wuhan_data["total_death"],
-            cure: hubei_data["total_cure"] - wuhan_data["total_cure"],
-            diagnosis:
-              hubei_data["total_diagnosis"] - wuhan_data["total_diagnosis"]
-          };
-
-          let country_not_hubei = {
-            title_1: "全国",
-            title_2: "(除湖北)",
-            death: country_data["total_death"] - hubei_data["total_death"],
-            cure: country_data["total_cure"] - hubei_data["total_cure"],
-            diagnosis:
-              country_data["total_diagnosis"] - hubei_data["total_diagnosis"]
-          };
-
-          total_dataset.push([wuhan, hubei_not_wuhan, country_not_hubei]);
+        this.compute_total_x_label(total_dataset);
+        this.compute_add_y_label();
+        let date_list = [];
+        this.country_dataset.forEach(d => {
+          date_list.push({
+            month: d.month,
+            day: d.day
+          });
         });
-
-        console.log('total_dataset', total_dataset)
+        this.date_list = date_list;
+        this.select_date_id = date_list.length - 1;
+        this.set_total_svg_params();
+        this.set_add_svg_params();
+        this.set_slider();
+        let that = this;
+    let timer = null;
+    $(".life_svg_div").scroll(function() {
+      clearTimeout(timer);
+      // console.log("???");
+      // console.log(this.scrollLeft);
+      that.test = this.scrollLeft;
+      let tmp = this.scrollLeft;
+      that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+      that.gap = that.max_scroll_distance - tmp;
+      let t = Math.round(that.gap / (that.add_x_step * 2));
+      that.select_date_id_bar = that.dataLens - that.showLens - t;
+      that.select_date_id =
+        that.select_date_id_bar + that.select_date_id_slider;
+      timer = setTimeout(
+        tmp => {
+          // console.log(tmp);
+          if (tmp === that.test) {
+            that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+            that.gap = that.max_scroll_distance - tmp;
+            let t = Math.round(that.gap / (that.add_x_step * 2));
+            // that.select_date_id_bar = that.dataLens - that.showLens - t
+            // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+            let fix_tmp = that.max_scroll_distance - t * (that.add_x_step * 2);
+            this.scrollLeft = fix_tmp;
+          }
+        },
+        100,
+        tmp
+      );
+    });
+    this.dataViewWidth = d3
+      .select(".life_svg_div")
+      .node()
+      .getBoundingClientRect().width;
       });
     },
     set_slider() {
@@ -1067,43 +1138,44 @@ export default {
     }
   },
   mounted() {
-    this.initData_pku();
-    // this.initData_tencent();
-    let that = this;
-    let timer = null;
-    $(".life_svg_div").scroll(function() {
-      clearTimeout(timer);
-      // console.log("???");
-      // console.log(this.scrollLeft);
-      that.test = this.scrollLeft;
-      let tmp = this.scrollLeft;
-      that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-      that.gap = that.max_scroll_distance - tmp;
-      let t = Math.round(that.gap / (that.add_x_step * 2));
-      that.select_date_id_bar = that.dataLens - that.showLens - t;
-      that.select_date_id =
-        that.select_date_id_bar + that.select_date_id_slider;
-      timer = setTimeout(
-        tmp => {
-          // console.log(tmp);
-          if (tmp === that.test) {
-            that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-            that.gap = that.max_scroll_distance - tmp;
-            let t = Math.round(that.gap / (that.add_x_step * 2));
-            // that.select_date_id_bar = that.dataLens - that.showLens - t
-            // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
-            let fix_tmp = that.max_scroll_distance - t * (that.add_x_step * 2);
-            this.scrollLeft = fix_tmp;
-          }
-        },
-        100,
-        tmp
-      );
-    });
-    this.dataViewWidth = d3
-      .select(".life_svg_div")
-      .node()
-      .getBoundingClientRect().width;
+    // this.initData_pku();
+    this.initData_tencent();
+    // moveTo Tecent
+    // let that = this;
+    // let timer = null;
+    // $(".life_svg_div").scroll(function() {
+    //   clearTimeout(timer);
+    //   // console.log("???");
+    //   // console.log(this.scrollLeft);
+    //   that.test = this.scrollLeft;
+    //   let tmp = this.scrollLeft;
+    //   that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+    //   that.gap = that.max_scroll_distance - tmp;
+    //   let t = Math.round(that.gap / (that.add_x_step * 2));
+    //   that.select_date_id_bar = that.dataLens - that.showLens - t;
+    //   that.select_date_id =
+    //     that.select_date_id_bar + that.select_date_id_slider;
+    //   timer = setTimeout(
+    //     tmp => {
+    //       // console.log(tmp);
+    //       if (tmp === that.test) {
+    //         that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+    //         that.gap = that.max_scroll_distance - tmp;
+    //         let t = Math.round(that.gap / (that.add_x_step * 2));
+    //         // that.select_date_id_bar = that.dataLens - that.showLens - t
+    //         // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+    //         let fix_tmp = that.max_scroll_distance - t * (that.add_x_step * 2);
+    //         this.scrollLeft = fix_tmp;
+    //       }
+    //     },
+    //     100,
+    //     tmp
+    //   );
+    // });
+    // this.dataViewWidth = d3
+    //   .select(".life_svg_div")
+    //   .node()
+    //   .getBoundingClientRect().width;
     // setTimeout(() => {
     //   console.log('scroll')
     //   $(".life_svg_div").scrollLeft = 100;
@@ -1351,7 +1423,7 @@ export default {
         position: absolute;
         width: 100%;
         height: 70vw;
-        overflow: hidden;
+        // overflow: hidden;
         // background: rgba(133, 113, 113, 0.3);
       }
     }
