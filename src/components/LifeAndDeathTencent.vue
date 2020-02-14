@@ -392,17 +392,17 @@
       <div id="slider">
         <svg id="slider_svg" width="100%" height="100%">
           <defs>
-            <linearGradient id="slider_linear" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#00bad1; stop-opacity: 0.95" />
-              <stop offset="100%" style="stop-color:#60cad7; stop-opacity: 0.6" />
+            <linearGradient id="slider_linear">
+              <stop offset="15%" style="stop-color:#60cad7; stop-opacity: 1" />
+              <stop offset="95%" style="stop-color:#00bad1; stop-opacity: 1" />
             </linearGradient>
             <filter id="shadow" x="-5%" y="0%" width="110%" height="120%">
               <feDropShadow
                 dx="0"
-                dy="1"
+                dy="0.6"
                 stdDeviation="1.2"
                 flood-color="#00B9D1"
-                flood-opacity="0.8"
+                flood-opacity="0.6"
               />
             </filter>
           </defs>
@@ -1270,6 +1270,11 @@ export default {
     this.initData_tencent();
     if (/(iPhone|iPad|iPod|iOS|Mac)/i.test(navigator.userAgent)) {
       console.log("isIOS");
+      this.isiOS = 1
+    }
+    let u = navigator.userAgent;
+    let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    if (isIOS) {
       this.isiOS = 1
     }
   }
