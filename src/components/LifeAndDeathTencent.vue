@@ -64,8 +64,8 @@
               font-weight="500"
             >{{data.title_1}}</text>
             <text
-              style="transform: translate(1.3vw, 7vw)"
-              font-size="2.1vw"
+              style="transform: translate(1.2vw, 7vw)"
+              font-size="2.1333vw"
               fill="#888888"
             >{{data.title_2}}</text>
             <rect
@@ -76,10 +76,10 @@
               class="diagnosis"
             />
             <!-- <text class="bar_text" y="3.5vw" :x="total_x_begin + 1">{{num2text(data.diagnosis)}}</text> -->
-            <text
+            <!-- <text
               class="bar_text"
               :style="`transform: translate(${total_x_begin + 1}px, 3.5vw);`"
-            >{{num2text(data.diagnosis)}}</text>
+            >{{num2text(data.diagnosis)}}</text> -->
             <rect
               :x="total_x_begin"
               y="4.3vw"
@@ -88,10 +88,10 @@
               class="cure"
             />
             <!-- <text class="bar_text" y="6.6vw" :x="total_x_begin + 1">{{num2text(data.cure)}}</text> -->
-            <text
+            <!-- <text
               class="bar_text"
               :style="`transform: translate(${total_x_begin + 1}px, 6.6vw);`"
-            >{{num2text(data.cure)}}</text>
+            >{{num2text(data.cure)}}</text> -->
             <rect
               :x="total_x_begin + total_bar_width(data.cure)"
               y="4.3vw"
@@ -105,17 +105,40 @@
               :style="data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end;` : ''"
               :x="data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1"
             >{{num2text(data.death)}}</text>-->
-            <text
+            <!-- <text
               class="bar_text"
               :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
                 + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
-            >{{num2text(data.death)}}</text>
+            >{{num2text(data.death)}}</text> -->
+            <!-- <text
+              class="bar_text"
+              :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
+                + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
+            >{{num2text(data.death)}}</text> -->
+            <g :style="`transform: translate(${total_x_begin + total_x_step * 5}px, 5.2vw);`">
+              <rect
+                :width="2.7 * total_x_step"
+                height="4vw"
+                fill="rgba(136, 136, 128, 0.05)"
+                :rx="total_x_step * 0.1"
+                :ry="total_x_step * 0.1"
+                />
+              <text :style="`transform: translate(${0.55 * total_x_step}px, 3vw); text-anchor: middle; font-size: 2.4vw`" class="diagnosis">
+                {{num2text(data.diagnosis)}}
+              </text>
+              <text :style="`transform: translate(${1.45 * total_x_step}px, 3vw); text-anchor: middle; font-size: 2.4vw`" class="cure">
+                {{num2text(data.cure)}}
+              </text>
+              <text :style="`transform: translate(${2.25 * total_x_step}px, 3vw); text-anchor: middle; font-size: 2.4vw`" class="death">
+                {{num2text(data.death)}}
+              </text>
+            </g>
             <g
               id="页面1"
               stroke="none"
               stroke-width="1"
               fill="none"
-              :style="`transform: translate(${total_x_begin + total_x_step * (total_x_label[select_date_id].length - 2.8)}px, 0) scale(${total_svg_width / 800})`"
+              :style="`transform: translate(${total_x_begin + total_x_step * (total_x_label[select_date_id].length - 2.8)}px, -0.5vw) scale(${total_svg_width / 800})`"
               fill-rule="evenodd"
             >
               <g id="手机" transform="translate(-528.000000, -748.000000)" fill="#FFFFFF">
@@ -219,7 +242,7 @@
           <div
             v-for="(label, index) in add_y_label"
             :style="`margin-bottom: ${
-              index===0 ? 14.8 : 4.3
+              index===0 ? 15.5 : 4.3
             }vw; font-weight: ${label === 0 ? 600 : 400};`"
             :key="`${label}-${index}`"
           >{{num2text(label)}}{{index===0 ? '%':''}}</div>
@@ -377,9 +400,9 @@
               <g id="x-label">
                 <text
                   v-for="(date, index) in date_list"
-                  :style="index===select_date_id ? `text-anchor: middle; font-size: 3.5vw; font-weight: 500; fill: '#333333'; transform: translate(0, 0.2vw); transition: ease 0.2s;` : `text-anchor: middle; font-size: 2.4vw; font-weight: 400; fill: '#333333';`"
+                  :style="index===select_date_id ? `text-anchor: middle; font-size: 2.4vw; font-weight: 500; fill: '#333333'; transform: translate(0, 0.1vw); transition: ease 0.2s;` : `text-anchor: middle; font-size: 2.1333333vw; font-weight: 400; fill: '#333333';`"
                   :x="add_x_step * (2 * index + 1)"
-                  :y="6.65 * add_y_step"
+                  :y="6.6 * add_y_step"
                   :key="`${date.month}-${date.day}`"
                 >{{`${date.month}/${date.day}`}}</text>
               </g>
@@ -1309,11 +1332,11 @@ export default {
 
 .title {
   font-weight: 500;
-  font-size: 3.5vw;
+  font-size: 28 / 7.5vw;
 }
 
 .label_text {
-  font-size: 18 / 7.5vw;
+  font-size: 16 / 7.5vw;
   fill: #919191;
   text-anchor: middle;
 }
@@ -1339,9 +1362,9 @@ export default {
   // fill: #010604;
   // background: #010604;
   // color: #010604;
-  fill: #888888;
-  background: #888888;
-  color: #888888;
+  fill: #535B65;
+  background: #535B65;
+  color: #535B65;
 }
 
 #head {
@@ -1351,14 +1374,14 @@ export default {
     // position: absolute;
     margin-top: 1.2vw;
     float: left;
-    height: 4.8vw;
+    height: 4.3vw;
     width: 7 /7.5vw;
     border-radius: 3.5 /7.5vw;
     background: #00bad1;
   }
   #title {
     padding-left: 16 /7.5vw;
-    font-size: 40 /7.5vw;
+    font-size: 4.8vw;
     font-weight: 600;
     color: #333333;
     // border-left: 1vw solid #00bad1;
@@ -1394,13 +1417,13 @@ export default {
   margin-top: 2vw;
   margin-left: 1.5vw;
   color: #b2b2b2;
-  font-size: 2.2vw;
+  font-size: 2.13333vw;
 }
 
 #total {
   margin-top: 60 /7.5vw;
   #legend {
-    margin-top: 20 /7.5vw;
+    margin-top: 4vw;
     height: 20 /7.5vw;
     .legend_part {
       float: right;
@@ -1465,7 +1488,7 @@ export default {
       transform: translateY(-50%);
       width: 4vw;
       height: 0.2vw;
-      border-bottom: 0.3vw dashed #888888;
+      border-bottom: 0.3vw dashed #535B65;
     }
     .legend_icon_line {
       position: absolute;
@@ -1505,7 +1528,7 @@ export default {
     }
   }
   .life_div {
-    margin-top: 10px;
+    margin-top: 0;
     width: 100%;
     height: 70vw;
     // border: 1px red solid;
@@ -1517,9 +1540,9 @@ export default {
       height: 100%;
       // background: rgba(142, 170, 142, 0.1);
       text-align: right;
-      font-size: 2.5vw;
+      font-size: 18/7.5vw;
       color: #888888;
-      margin-top: 3vw;
+      margin-top: 2.4vw;
     }
     .life_svg_div {
       // position: relative;
