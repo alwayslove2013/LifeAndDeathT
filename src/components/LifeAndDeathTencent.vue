@@ -1212,6 +1212,18 @@ export default {
           .style("stroke-width", height * 0.2)
           .style("stroke-linecap", "round");
         // .classed("slider-container", true);
+        let bar_g = g.append("g");
+        let bars = [0, 1, 2];
+        bar_g
+          .append("rect")
+          .attr("x", w * total - w * 1.2)
+          .attr("y", height / 2 - h * 0.25)
+          .attr("width", w * 1.4)
+          .attr("height", h * 0.75)
+          .attr("class", "bar_g")
+          .attr("rx", w * 0.12)
+          .attr("ry", w * 0.12)
+          .classed("slider-rect-shadow", true);
         let target = g
           .append("rect")
           .attr("x", w * total - w * 1.2)
@@ -1221,9 +1233,8 @@ export default {
           .attr("rx", w * 0.12)
           .attr("ry", w * 0.12)
           .classed("slider-rect", true);
-        let bar_g = g.append("g");
-        let bars = [0, 1, 2];
-        bar_g
+        g
+          .append("g")
           .selectAll("rect")
           .data(bars)
           .enter()
@@ -1555,6 +1566,13 @@ export default {
 .slider-rect {
   // box-shadow: 0 0 5vw 0 rgba(0, 0, 0, 0.5);
   fill: url(#slider_linear);
+  // filter: url(#shadow);
+}
+
+.slider-rect-shadow {
+  // box-shadow: 0 0 5vw 0 rgba(0, 0, 0, 0.5);
+  // fill: url(#slider_linear);
   filter: url(#shadow);
+  fill: #00bad1;
 }
 </style>
