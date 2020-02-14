@@ -389,8 +389,7 @@
         </svg>
       </div> -->
 
-      <!-- <div class="description" style="margin-left: 2vw;">*滑动图表查看更多时间范围数据，移动滑块选择不同日期，条形图也会同步变化</div> -->
-
+      <!-- <div class="description" style="margin-left: 2vw;">*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div> -->
       <!-- <div id="footer" style="height: 10vw;">
         <p>scroll-left: {{scroll_left}};</p>
         <p>select_date_id: {{select_date_id}}</p>
@@ -1250,9 +1249,12 @@ export default {
 }
 
 .death {
-  fill: #010604;
-  background: #010604;
-  color: #010604;
+  // fill: #010604;
+  // background: #010604;
+  // color: #010604;
+  fill: #888888;
+  background: #888888;
+  color: #888888;
 }
 
 #head {
@@ -1376,7 +1378,7 @@ export default {
       transform: translateY(-50%);
       width: 4vw;
       height: 0.2vw;
-      border-bottom: 0.3vw dashed #010604;
+      border-bottom: 0.3vw dashed #888888;
     }
     .legend_icon_line {
       position: absolute;
