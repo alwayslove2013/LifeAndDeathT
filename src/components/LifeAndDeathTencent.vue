@@ -1438,7 +1438,7 @@ export default {
         width: 18 /7.5vw;
         height: 18 /7.5vw;
         float: left;
-        margin-top: 3 /7.5vw;
+        margin-top: 4 /7.5vw;
         border-radius: 0.4vw;
       }
     }
@@ -1474,7 +1474,7 @@ export default {
     }
     .legend_line_cure {
       position: absolute;
-      top: 50%;
+      top: 48%;
       left: 4vw;
       transform: translateY(-50%);
       width: 4vw;
@@ -1483,7 +1483,7 @@ export default {
     }
     .legend_line_death {
       position: absolute;
-      top: 50%;
+      top: 48%;
       left: 4vw;
       transform: translateY(-50%);
       width: 4vw;
@@ -1496,7 +1496,7 @@ export default {
       left: 8vw;
       transform: translateY(-50%);
       width: 1.6vw;
-      height: 1.6vw;
+      height: 1.8vw;
       border-radius: 0.4vw;
     }
     .legend_text_line {
@@ -1505,6 +1505,7 @@ export default {
       left: 11vw;
       transform: translateY(-50%);
       font-size: 2.5vw;
+      line-height: 2.8vw;
       height: 3vw;
       width: 12vw;
     }
@@ -1523,7 +1524,7 @@ export default {
       left: 8vw;
       transform: translateY(-50%);
       font-size: 2.5vw;
-      height: 3vw;
+      line-height: 2.8vw;
       width: 12vw;
     }
   }
