@@ -36,11 +36,10 @@
               v-for="(line, index) in total_x_label[select_date_id]"
               :key="line + `${index}`"
               class="total_label_line"
-              :d="index===(total_x_label[select_date_id].length - 1) ? `M${total_x_begin + (index+0.5)*total_x_step},5v${total_svg_height * 0.86}` : `M${total_x_begin + index*total_x_step},5v${total_svg_height * 0.86}`"
+              :d="index===(total_x_label[select_date_id].length - 1) ? `M${total_x_begin + (index+0.5)*total_x_step},5v${total_svg_height * 0.80}` : `M${total_x_begin + index*total_x_step},5v${total_svg_height * 0.80}`"
             />
           </g>
-          <g
-            class="x_label"
+          <g class="x_label"
             :style="`transform: translate(${total_x_begin}px, ${total_svg_height}px);`"
           >
             <text
@@ -409,13 +408,13 @@
         </svg>
       </div>
 
-      <!-- <div class="description" style="margin-left: 2vw;">*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div> -->
-      <div id="footer" style="height: 10vw;">
+      <div class="description" style="margin-left: 3vw;">*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div>
+      <!-- <div id="footer" style="height: 10vw;">
         <p>scroll-left: {{scroll_left}}; isIOS: {{isiOS}}</p>
         <p>select_date_id: {{select_date_id}}</p>
         <p>select_date_id_bar: {{select_date_id_bar}}</p>
         <p>select_date_id_slider: {{select_date_id_slider}}</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -585,7 +584,7 @@ export default {
       // this.add_svg_width = add_svg_div_rect.width;
       this.add_svg_height = add_svg_div_rect.height;
       this.add_y_step = this.add_svg_height / 9.5;
-      this.add_x_step = this.add_svg_width / 2 / (this.dataLens + 0.5);
+      this.add_x_step = this.add_svg_width / 2 / (this.dataLens + 0.2);
       this.add_x_end = this.add_svg_width - 2 * this.dataLens * this.add_x_step;
       // console.log('add_svg_div_rect', add_svg_div_rect);
       // console.log('this.add_x_step', this.add_x_step)
@@ -1233,8 +1232,7 @@ export default {
           .attr("rx", w * 0.12)
           .attr("ry", w * 0.12)
           .classed("slider-rect", true);
-        g
-          .append("g")
+        g.append("g")
           .selectAll("rect")
           .data(bars)
           .enter()
@@ -1280,13 +1278,20 @@ export default {
     // this.initData_pku();
     this.initData_tencent();
     if (/(iPhone|iPad|iPod|iOS|Mac)/i.test(navigator.userAgent)) {
-      console.log("isIOS");
-      this.isiOS = 1
+      if (
+        /Safari/.test(navigator.userAgent) &&
+        /Chrome/.test(navigator.userAgent)
+      ) {
+        this.isiOS = 0;
+      } else {
+        // console.log("isIOS");
+        this.isiOS = 1;
+      }
     }
     let u = navigator.userAgent;
     let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
     if (isIOS) {
-      this.isiOS = 1
+      this.isiOS = 1;
     }
   }
 };
@@ -1543,9 +1548,9 @@ export default {
   }
 
   #slider {
-    margin-left: 6.2%;
+    margin-left: 7.2%;
     margin-top: 0vw;
-    width: 93%;
+    width: 94.8%;
     height: 7vw;
     // border: 1px solid red;
     position: relative;
