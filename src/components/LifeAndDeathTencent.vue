@@ -411,7 +411,7 @@
 
       <!-- <div class="description" style="margin-left: 2vw;">*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div> -->
       <div id="footer" style="height: 10vw;">
-        <p>scroll-left: {{scroll_left}};</p>
+        <p>scroll-left: {{scroll_left}}; isIOS: {{isiOS}}</p>
         <p>select_date_id: {{select_date_id}}</p>
         <p>select_date_id_bar: {{select_date_id_bar}}</p>
         <p>select_date_id_slider: {{select_date_id_slider}}</p>
@@ -459,7 +459,8 @@ export default {
       gap: 0,
       hightlight_rect: {},
       bold_line_index_list: [0, 1, 4, 5],
-      scroll_left: 0
+      scroll_left: 0,
+      isiOS: 0
     };
   },
   watch: {
@@ -1066,36 +1067,72 @@ export default {
         .addEventListener("scroll", function(e) {
           // console.log("==========", e, e.target, e.target.scrollLeft);
           // console.log(e.target.scrollWidth, e.target.clientWidth);
-          that.scroll_left = e.target.scrollLeft;
-          // console.log(timer)
-          clearTimeout(timer);
-          let tmp = that.scroll_left;
-          that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-          // console.log(tmp, that.scroll_left)
-          that.gap = that.max_scroll_distance - tmp;
-          let t = Math.round(that.gap / (that.add_x_step * 2));
-          // console.log(t)
-          that.select_date_id_bar = that.dataLens - that.showLens - t;
-          that.select_date_id =
-            that.select_date_id_bar + that.select_date_id_slider;
-          timer = setTimeout(
-            tmp => {
-              // console.log(tmp);
-              if (tmp === that.scroll_left) {
-                that.max_scroll_distance =
-                  -that.dataViewWidth + that.add_svg_width;
-                that.gap = that.max_scroll_distance - tmp;
-                let t = Math.round(that.gap / (that.add_x_step * 2));
-                // that.select_date_id_bar = that.dataLens - that.showLens - t
-                // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
-                let fix_tmp =
-                  that.max_scroll_distance - t * (that.add_x_step * 2);
-                e.target.scrollLeft = fix_tmp;
-              }
-            },
-            100,
-            tmp
-          );
+          if (!that.isiOS) {
+            that.scroll_left = e.target.scrollLeft;
+            // console.log(timer)
+            clearTimeout(timer);
+            let tmp = that.scroll_left;
+            that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+            // console.log('that.max_scroll_distance', that.max_scroll_distance)
+            that.gap = that.max_scroll_distance - tmp;
+            let t = Math.round(that.gap / (that.add_x_step * 2));
+            // console.log(t)
+            that.select_date_id_bar = that.dataLens - that.showLens - t;
+            that.select_date_id =
+              that.select_date_id_bar + that.select_date_id_slider;
+            timer = setTimeout(
+              tmp => {
+                // console.log(tmp);
+                if (tmp === that.scroll_left) {
+                  that.max_scroll_distance =
+                    -that.dataViewWidth + that.add_svg_width;
+                  that.gap = that.max_scroll_distance - tmp;
+                  let t = Math.round(that.gap / (that.add_x_step * 2));
+                  // that.select_date_id_bar = that.dataLens - that.showLens - t
+                  // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+                  let fix_tmp =
+                    that.max_scroll_distance - t * (that.add_x_step * 2);
+                  e.target.scrollLeft = fix_tmp;
+                }
+              },
+              100,
+              tmp
+            );
+          }
+          if (that.isiOS) {
+            that.scroll_left =
+              e.target.scrollLeft + e.target.scrollWidth - e.target.clientWidth;
+            // console.log(timer)
+            clearTimeout(timer);
+            let tmp = that.scroll_left;
+            that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+            // console.log('that.max_scroll_distance', that.max_scroll_distance)
+            that.gap = that.max_scroll_distance - tmp;
+            let t = Math.round(that.gap / (that.add_x_step * 2));
+            // console.log(t)
+            that.select_date_id_bar = that.dataLens - that.showLens - t;
+            that.select_date_id =
+              that.select_date_id_bar + that.select_date_id_slider;
+            timer = setTimeout(
+              tmp => {
+                // console.log(tmp);
+                if (tmp === that.scroll_left) {
+                  that.max_scroll_distance =
+                    -that.dataViewWidth + that.add_svg_width;
+                  that.gap = that.max_scroll_distance - tmp;
+                  let t = Math.round(that.gap / (that.add_x_step * 2));
+                  // that.select_date_id_bar = that.dataLens - that.showLens - t
+                  // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+                  let fix_tmp =
+                    that.max_scroll_distance - t * (that.add_x_step * 2);
+                  e.target.scrollLeft =
+                    fix_tmp - e.target.scrollWidth + e.target.clientWidth;
+                }
+              },
+              100,
+              tmp
+            );
+          }
         });
     },
     set_scroll_by_jquery() {
@@ -1231,6 +1268,10 @@ export default {
   mounted() {
     // this.initData_pku();
     this.initData_tencent();
+    if (/(iPhone|iPad|iPod|iOS|Mac)/i.test(navigator.userAgent)) {
+      console.log("isIOS");
+      this.isiOS = 1
+    }
   }
 };
 </script>
