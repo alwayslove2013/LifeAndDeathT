@@ -2,15 +2,13 @@
   <div id="container">
     <div id="head">
       <div id="left_border" />
-      <div id="title">
-        新冠肺炎疫情生命线
-      </div>
+      <div id="title">新冠肺炎疫情生命线</div>
       <div id="description">(7:00-10:00左右为数据更新高峰，显示可能略有滞后请谅解)</div>
     </div>
 
     <!-- <div id="explanation">
       <div id="explanation_text">治愈率为该地区治愈人数在确诊人数中的占比。死亡率为该地区公布的死亡人数在确诊人数中的占比；</div>
-    </div> -->
+    </div>-->
 
     <div id="total">
       <div
@@ -41,8 +39,10 @@
               :d="index===(total_x_label[select_date_id].length - 1) ? `M${total_x_begin + (index+0.5)*total_x_step},5v${total_svg_height * 0.86}` : `M${total_x_begin + index*total_x_step},5v${total_svg_height * 0.86}`"
             />
           </g>
-          <g class="x_label"
-            :style="`transform: translate(${total_x_begin}px, ${total_svg_height}px);`">
+          <g
+            class="x_label"
+            :style="`transform: translate(${total_x_begin}px, ${total_svg_height}px);`"
+          >
             <text
               v-for="(label, index) in total_x_label[select_date_id]"
               class="label_text"
@@ -59,12 +59,16 @@
             :key="data.title_1"
             :style="`transform: translate(0, ${total_svg_height * 0.4 * index}px);`"
           >
-            <text style="transform: translate(2vw, 4vw)" font-size="3.2vw" font-weight="500">
-              {{data.title_1}}
-            </text>
-            <text style="transform: translate(1.3vw, 7vw)" font-size="2.1vw" fill="#888888">
-              {{data.title_2}}
-            </text>
+            <text
+              style="transform: translate(2vw, 4vw)"
+              font-size="3.2vw"
+              font-weight="500"
+            >{{data.title_1}}</text>
+            <text
+              style="transform: translate(1.3vw, 7vw)"
+              font-size="2.1vw"
+              fill="#888888"
+            >{{data.title_2}}</text>
             <rect
               :x="total_x_begin"
               y="1.3vw"
@@ -73,7 +77,10 @@
               class="diagnosis"
             />
             <!-- <text class="bar_text" y="3.5vw" :x="total_x_begin + 1">{{num2text(data.diagnosis)}}</text> -->
-            <text class="bar_text" :style="`transform: translate(${total_x_begin + 1}px, 3.5vw);`">{{num2text(data.diagnosis)}}</text>
+            <text
+              class="bar_text"
+              :style="`transform: translate(${total_x_begin + 1}px, 3.5vw);`"
+            >{{num2text(data.diagnosis)}}</text>
             <rect
               :x="total_x_begin"
               y="4.3vw"
@@ -82,7 +89,10 @@
               class="cure"
             />
             <!-- <text class="bar_text" y="6.6vw" :x="total_x_begin + 1">{{num2text(data.cure)}}</text> -->
-            <text class="bar_text" :style="`transform: translate(${total_x_begin + 1}px, 6.6vw);`">{{num2text(data.cure)}}</text>
+            <text
+              class="bar_text"
+              :style="`transform: translate(${total_x_begin + 1}px, 6.6vw);`"
+            >{{num2text(data.cure)}}</text>
             <rect
               :x="total_x_begin + total_bar_width(data.cure)"
               y="4.3vw"
@@ -95,7 +105,7 @@
               y="6.7vw"
               :style="data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end;` : ''"
               :x="data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1"
-            >{{num2text(data.death)}}</text> -->
+            >{{num2text(data.death)}}</text>-->
             <text
               class="bar_text"
               :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
@@ -216,7 +226,7 @@
           >{{num2text(label)}}{{index===0 ? '%':''}}</div>
         </div>
         <div class="life_svg_div">
-          <!-- <div class="highlight_svg_div" style="pointer-events: none;">
+          <div class="highlight_svg_div" style="pointer-events: none;">
             <svg width="100%" height="100%">
               <defs>
                 <linearGradient id="orange_red" x1="100%" y1="0%" x2="100%" y2="100%">
@@ -232,7 +242,7 @@
                 fill="url(#orange_red)"
               />
             </svg>
-          </div> -->
+          </div>
           <div
             class="life_svg_div_big"
             :style="`height: 100%; width: ${dataLens / showLens * 100}%`"
@@ -305,7 +315,7 @@
                   :ry="add_x_step * 0.06"
                 />
               </g>
-              <!-- <g id="line-char-highlight">
+              <g id="line-char-highlight">
                 <text
                   class="label_text"
                   :x="add_x_step * (2 * select_date_id + 1)"
@@ -316,7 +326,7 @@
                   :x="add_x_step * (2 * select_date_id + 1)"
                   :y="country_dataset[select_date_id] ? (add_y_step * 0.5 + (add_y_label[0] - country_dataset[select_date_id].cure_rate * 100) / add_y_label[0] * add_y_step * 2.5 - add_y_step * 0.2) : 0"
                 >{{country_dataset[select_date_id] ? (country_dataset[select_date_id].cure_rate * 100).toFixed(1) + '%' : ''}}</text>
-              </g> -->
+              </g>
               <g id="bar-chart">
                 <g id="bar-chart-cure">
                   <rect
@@ -368,7 +378,7 @@
               <g id="x-label">
                 <text
                   v-for="(date, index) in date_list"
-                  :style="`text-anchor: middle; font-size: 2.4vw; font-weight: 400; fill: '#333333';`"
+                  :style="index===select_date_id ? `text-anchor: middle; font-size: 3.5vw; font-weight: 500; fill: '#333333'; transform: translate(0, 0.2vw); transition: ease 0.2s;` : `text-anchor: middle; font-size: 2.4vw; font-weight: 400; fill: '#333333';`"
                   :x="add_x_step * (2 * index + 1)"
                   :y="6.65 * add_y_step"
                   :key="`${date.month}-${date.day}`"
@@ -379,30 +389,40 @@
         </div>
       </div>
 
-      <!-- <div id="slider">
+      <div id="slider">
         <svg id="slider_svg" width="100%" height="100%">
           <defs>
-            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0.5" dy="1" stdDeviation="1.4" flood-color="#00B9D1"/>
+            <linearGradient id="slider_linear" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#00bad1; stop-opacity: 0.95" />
+              <stop offset="100%" style="stop-color:#60cad7; stop-opacity: 0.6" />
+            </linearGradient>
+            <filter id="shadow" x="-5%" y="0%" width="110%" height="120%">
+              <feDropShadow
+                dx="0"
+                dy="1"
+                stdDeviation="1.2"
+                flood-color="#00B9D1"
+                flood-opacity="0.8"
+              />
             </filter>
           </defs>
         </svg>
-      </div> -->
+      </div>
 
       <!-- <div class="description" style="margin-left: 2vw;">*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div> -->
-      <!-- <div id="footer" style="height: 10vw;">
+      <div id="footer" style="height: 10vw;">
         <p>scroll-left: {{scroll_left}};</p>
         <p>select_date_id: {{select_date_id}}</p>
         <p>select_date_id_bar: {{select_date_id_bar}}</p>
         <p>select_date_id_slider: {{select_date_id_slider}}</p>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import * as d3 from "d3";
-// import $ from "jquery";
+import $ from "jquery";
 // import axios from "axios";
 export default {
   name: "left-and-death-tencent",
@@ -439,7 +459,7 @@ export default {
       gap: 0,
       hightlight_rect: {},
       bold_line_index_list: [0, 1, 4, 5],
-      scroll_left: 0,
+      scroll_left: 0
     };
   },
   watch: {
@@ -560,7 +580,7 @@ export default {
         .select(".life_svg_div_big")
         .node()
         .getBoundingClientRect();
-      this.add_svg_width = tmp.width * this.dataLens / this.showLens;
+      this.add_svg_width = (tmp.width * this.dataLens) / this.showLens;
       // this.add_svg_width = add_svg_div_rect.width;
       this.add_svg_height = add_svg_div_rect.height;
       this.add_y_step = this.add_svg_height / 9.5;
@@ -948,10 +968,8 @@ export default {
           title_1: "湖北",
           title_2: "",
           death: hubei_data["total_death"],
-          cure:
-            hubei_data["total_cure"],
-          diagnosis:
-            hubei_data["total_diagnosis"]
+          cure: hubei_data["total_cure"],
+          diagnosis: hubei_data["total_diagnosis"]
         };
 
         let country_not_hubei = {
@@ -979,10 +997,10 @@ export default {
       ]).then(d => {
         this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
 
-        let country_flag = 0
-        let hubei_flag = 0
-        let last_hubei = d[1][d[1].length - 1]
-        let last_country = d[0][d[0].length - 1]
+        let country_flag = 0;
+        let hubei_flag = 0;
+        let last_hubei = d[1][d[1].length - 1];
+        let last_country = d[0][d[0].length - 1];
         if (last_hubei.day - last_country.day === 1) {
           hubei_flag = 1;
         }
@@ -997,7 +1015,7 @@ export default {
         );
         this.country_dataset = country_dataset;
         // console.log("country_dataset", country_dataset);
-        
+
         let hubei_dataset = d[1].splice(
           d[1].length - this.dataLens - hubei_flag,
           this.dataLens
@@ -1030,42 +1048,89 @@ export default {
         this.select_date_id = date_list.length - 1;
         this.set_total_svg_params();
         this.set_add_svg_params();
-        // this.set_slider();
-    //     let that = this;
-    // let timer = null;
-    // $(".life_svg_div").scroll(function() {
-    //   clearTimeout(timer);
-    //   // console.log("???");
-    //   // console.log(this.scrollLeft);
-    //   that.scroll_left = this.scrollLeft;
-    //   let tmp = this.scrollLeft;
-    //   that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-    //   that.gap = that.max_scroll_distance - tmp;
-    //   let t = Math.round(that.gap / (that.add_x_step * 2));
-    //   that.select_date_id_bar = that.dataLens - that.showLens - t;
-    //   that.select_date_id =
-    //     that.select_date_id_bar + that.select_date_id_slider;
-    //   timer = setTimeout(
-    //     tmp => {
-    //       // console.log(tmp);
-    //       if (tmp === that.scroll_left) {
-    //         that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-    //         that.gap = that.max_scroll_distance - tmp;
-    //         let t = Math.round(that.gap / (that.add_x_step * 2));
-    //         // that.select_date_id_bar = that.dataLens - that.showLens - t
-    //         // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
-    //         let fix_tmp = that.max_scroll_distance - t * (that.add_x_step * 2);
-    //         this.scrollLeft = fix_tmp;
-    //       }
-    //     },
-    //     100,
-    //     tmp
-    //   );
-    // });
-    this.dataViewWidth = d3
-      .select(".life_svg_div")
-      .node()
-      .getBoundingClientRect().width;
+        this.set_slider();
+        // this.set_scroll_by_jquery();
+        this.set_scroll_by_addEvent();
+        this.dataViewWidth = d3
+          .select(".life_svg_div")
+          .node()
+          .getBoundingClientRect().width;
+      });
+    },
+    set_scroll_by_addEvent() {
+      // console.log("set_scroll_by_addEvent Begin!!!!");
+      let that = this;
+      let timer = null;
+      document
+        .querySelector(".life_svg_div")
+        .addEventListener("scroll", function(e) {
+          // console.log("==========", e, e.target, e.target.scrollLeft);
+          // console.log(e.target.scrollWidth, e.target.clientWidth);
+          that.scroll_left = e.target.scrollLeft;
+          // console.log(timer)
+          clearTimeout(timer);
+          let tmp = that.scroll_left;
+          that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+          // console.log(tmp, that.scroll_left)
+          that.gap = that.max_scroll_distance - tmp;
+          let t = Math.round(that.gap / (that.add_x_step * 2));
+          // console.log(t)
+          that.select_date_id_bar = that.dataLens - that.showLens - t;
+          that.select_date_id =
+            that.select_date_id_bar + that.select_date_id_slider;
+          timer = setTimeout(
+            tmp => {
+              // console.log(tmp);
+              if (tmp === that.scroll_left) {
+                that.max_scroll_distance =
+                  -that.dataViewWidth + that.add_svg_width;
+                that.gap = that.max_scroll_distance - tmp;
+                let t = Math.round(that.gap / (that.add_x_step * 2));
+                // that.select_date_id_bar = that.dataLens - that.showLens - t
+                // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+                let fix_tmp =
+                  that.max_scroll_distance - t * (that.add_x_step * 2);
+                e.target.scrollLeft = fix_tmp;
+              }
+            },
+            100,
+            tmp
+          );
+        });
+    },
+    set_scroll_by_jquery() {
+      let that = this;
+      let timer = null;
+      $(".life_svg_div").scroll(function() {
+        clearTimeout(timer);
+        // console.log("???");
+        // console.log(this.scrollLeft);
+        that.scroll_left = this.scrollLeft;
+        let tmp = this.scrollLeft;
+        that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+        that.gap = that.max_scroll_distance - tmp;
+        let t = Math.round(that.gap / (that.add_x_step * 2));
+        that.select_date_id_bar = that.dataLens - that.showLens - t;
+        that.select_date_id =
+          that.select_date_id_bar + that.select_date_id_slider;
+        timer = setTimeout(
+          tmp => {
+            // console.log(tmp);
+            if (tmp === that.scroll_left) {
+              that.max_scroll_distance =
+                -that.dataViewWidth + that.add_svg_width;
+              that.gap = that.max_scroll_distance - tmp;
+              let t = Math.round(that.gap / (that.add_x_step * 2));
+              // that.select_date_id_bar = that.dataLens - that.showLens - t
+              // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+              let fix_tmp =
+                that.max_scroll_distance - t * (that.add_x_step * 2);
+              this.scrollLeft = fix_tmp;
+            }
+          },
+          100,
+          tmp
+        );
       });
     },
     set_slider() {
@@ -1116,8 +1181,8 @@ export default {
           .attr("y", height / 2 - h / 2)
           .attr("width", w * 1.4)
           .attr("height", h)
-          .attr("rx", w * 0.2)
-          .attr("ry", w * 0.2)
+          .attr("rx", w * 0.12)
+          .attr("ry", w * 0.12)
           .classed("slider-rect", true);
         let bar_g = g.append("g");
         let bars = [0, 1, 2];
@@ -1133,7 +1198,7 @@ export default {
           .attr("y", height / 2 - h * 0.23)
           .attr("width", 0.04 * w)
           .attr("height", 0.46 * h)
-          .style("fill", "white")
+          .style("fill", "#ffffff")
           .attr("rx", 0.02 * w)
           .attr("ry", 0.02 * w);
         target.call(
@@ -1166,46 +1231,6 @@ export default {
   mounted() {
     // this.initData_pku();
     this.initData_tencent();
-    // moveTo Tecent
-    // let that = this;
-    // let timer = null;
-    // $(".life_svg_div").scroll(function() {
-    //   clearTimeout(timer);
-    //   // console.log("???");
-    //   // console.log(this.scrollLeft);
-    //   that.test = this.scrollLeft;
-    //   let tmp = this.scrollLeft;
-    //   that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-    //   that.gap = that.max_scroll_distance - tmp;
-    //   let t = Math.round(that.gap / (that.add_x_step * 2));
-    //   that.select_date_id_bar = that.dataLens - that.showLens - t;
-    //   that.select_date_id =
-    //     that.select_date_id_bar + that.select_date_id_slider;
-    //   timer = setTimeout(
-    //     tmp => {
-    //       // console.log(tmp);
-    //       if (tmp === that.test) {
-    //         that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-    //         that.gap = that.max_scroll_distance - tmp;
-    //         let t = Math.round(that.gap / (that.add_x_step * 2));
-    //         // that.select_date_id_bar = that.dataLens - that.showLens - t
-    //         // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
-    //         let fix_tmp = that.max_scroll_distance - t * (that.add_x_step * 2);
-    //         this.scrollLeft = fix_tmp;
-    //       }
-    //     },
-    //     100,
-    //     tmp
-    //   );
-    // });
-    // this.dataViewWidth = d3
-    //   .select(".life_svg_div")
-    //   .node()
-    //   .getBoundingClientRect().width;
-    // setTimeout(() => {
-    //   console.log('scroll')
-    //   $(".life_svg_div").scrollLeft = 100;
-    // }, 1000)
   }
 };
 </script>
@@ -1262,7 +1287,7 @@ export default {
   vertical-align: middle;
   #left_border {
     // position: absolute;
-    margin-top: 1.20vw;
+    margin-top: 1.2vw;
     float: left;
     height: 4.8vw;
     width: 7 /7.5vw;
@@ -1461,7 +1486,7 @@ export default {
   }
 
   #slider {
-    margin-left: 6.5%;
+    margin-left: 6.2%;
     margin-top: 0vw;
     width: 93%;
     height: 7vw;
@@ -1483,7 +1508,7 @@ export default {
 
 .slider-rect {
   // box-shadow: 0 0 5vw 0 rgba(0, 0, 0, 0.5);
-  fill: #00bad1;
+  fill: url(#slider_linear);
   filter: url(#shadow);
 }
 </style>
