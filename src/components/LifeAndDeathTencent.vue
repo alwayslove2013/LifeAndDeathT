@@ -299,7 +299,7 @@
               <g id="line-chart">
                 <path
                   :d="cure_rect_path"
-                  stroke-dasharray="0.4vw 0.4vw"
+                  stroke-dasharray="3 3"
                   style="stroke: #62c298; stroke-width: 0.2vw; fill: none;"
                 />
                 <path
@@ -319,7 +319,7 @@
                 />
                 <path
                   :d="death_rect_path"
-                  stroke-dasharray="0.4vw 0.4vw"
+                  stroke-dasharray="3 3"
                   style="stroke: #333333; stroke-width: 0.2vw; fill: none;"
                 />
                 <path
@@ -1098,7 +1098,8 @@ export default {
             let tmp = that.scroll_left;
             that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
             // console.log('that.max_scroll_distance', that.max_scroll_distance)
-            that.gap = that.max_scroll_distance - tmp;
+            // that.gap = that.max_scroll_distance - tmp;
+            that.gap = Math.min(that.max_scroll_distance, Math.max(that.max_scroll_distance - tmp, 0));
             let t = Math.round(that.gap / (that.add_x_step * 2));
             // console.log(t)
             that.select_date_id_bar = that.dataLens - that.showLens - t;
@@ -1110,7 +1111,8 @@ export default {
                 if (tmp === that.scroll_left) {
                   that.max_scroll_distance =
                     -that.dataViewWidth + that.add_svg_width;
-                  that.gap = that.max_scroll_distance - tmp;
+                  // that.gap = that.max_scroll_distance - tmp;
+                  that.gap = Math.min(that.max_scroll_distance, Math.max(that.max_scroll_distance - tmp, 0));
                   let t = Math.round(that.gap / (that.add_x_step * 2));
                   // that.select_date_id_bar = that.dataLens - that.showLens - t
                   // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
@@ -1131,7 +1133,8 @@ export default {
             let tmp = that.scroll_left;
             that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
             // console.log('that.max_scroll_distance', that.max_scroll_distance)
-            that.gap = that.max_scroll_distance - tmp;
+            // that.gap = that.max_scroll_distance - tmp;
+            that.gap = Math.min(that.max_scroll_distance, Math.max(that.max_scroll_distance - tmp, 0));
             let t = Math.round(that.gap / (that.add_x_step * 2));
             // console.log(t)
             that.select_date_id_bar = that.dataLens - that.showLens - t;
@@ -1143,7 +1146,8 @@ export default {
                 if (tmp === that.scroll_left) {
                   that.max_scroll_distance =
                     -that.dataViewWidth + that.add_svg_width;
-                  that.gap = that.max_scroll_distance - tmp;
+                  // that.gap = that.max_scroll_distance - tmp;
+                  that.gap = Math.min(that.max_scroll_distance, Math.max(that.max_scroll_distance - tmp, 0));
                   let t = Math.round(that.gap / (that.add_x_step * 2));
                   // that.select_date_id_bar = that.dataLens - that.showLens - t
                   // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
