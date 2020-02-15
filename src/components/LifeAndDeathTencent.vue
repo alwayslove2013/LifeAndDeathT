@@ -215,7 +215,7 @@
       <div class="description">*锯齿线用于数据差异过大时隔断坐标轴</div>
     </div>
 
-    <div id="add" style="margin-top: 10vw;">
+    <div id="add" style="margin-top: 50 / 7.5vw;">
       <div class="title">全国新增治愈/死亡病例数</div>
       <div id="legend" style="margin-top: 3vw;">
         <div class="legend_part">
@@ -1327,7 +1327,7 @@ export default {
 </script>
 
 <style lang="less">
-@border: 8.53333333333333vw;
+@border: 40px;
 #container {
   position: absolute;
   left: @border;
@@ -1374,7 +1374,7 @@ export default {
 }
 
 #head {
-  margin-top: 40 /7.5vw;
+  margin-top: 50 / 7.5vw;
   vertical-align: middle;
   #left_border {
     // position: absolute;
@@ -1427,7 +1427,7 @@ export default {
 }
 
 #total {
-  margin-top: 60 /7.5vw;
+  margin-top: 50 / 7.5vw;
   #legend {
     margin-top: 4vw;
     height: 20 /7.5vw;
