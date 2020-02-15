@@ -1386,7 +1386,7 @@ export default {
     background: #00bad1;
   }
   #title {
-    padding-left: 16 /7.5vw;
+    padding-left: 18 /7.5vw;
     font-size: 4.8vw;
     font-weight: 600;
     color: #333333;
@@ -1394,7 +1394,7 @@ export default {
   }
   #description {
     margin-top: 1vw;
-    margin-left: 18 /7.5vw;
+    margin-left: 19 /7.5vw;
     font-size: 2.8vw;
     color: #888888;
   }
