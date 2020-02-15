@@ -1017,9 +1017,10 @@ export default {
       Promise.all([
         this.getCountryDataset(url),
         this.getHubeiDataset(url),
-        this.getWuhanDataset(url)
+        // this.getWuhanDataset(url)
       ]).then(d => {
-        this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
+        // this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
+        this.dataLens = Math.min(d[0].length, d[1].length);
 
         let country_flag = 0;
         let hubei_flag = 0;
@@ -1045,16 +1046,16 @@ export default {
           this.dataLens
         );
         // console.log("hubei_dataset", hubei_dataset);
-        let wuhan_dataset = d[2].splice(
-          d[2].length - this.dataLens,
-          this.dataLens
-        );
+        // let wuhan_dataset = d[2].splice(
+        //   d[2].length - this.dataLens,
+        //   this.dataLens
+        // );
         // console.log("wuhan_dataset", wuhan_dataset);
 
         let total_dataset = this.getTotalDatatest(
           country_dataset,
           hubei_dataset,
-          wuhan_dataset
+          // wuhan_dataset
         );
         // console.log("total_dataset", total_dataset);
         this.total_dataset = total_dataset;
