@@ -112,6 +112,7 @@
             >{{num2text(data.death)}}</text> -->
             <text
               class="bar_text"
+              :transform="`translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw)`"
               :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
                 + ` -webkit-transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
             >{{num2text(data.death)}}</text>
