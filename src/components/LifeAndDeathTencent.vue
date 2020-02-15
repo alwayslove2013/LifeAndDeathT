@@ -76,10 +76,10 @@
               class="diagnosis"
             />
             <!-- <text class="bar_text" y="3.5vw" :x="total_x_begin + 1">{{num2text(data.diagnosis)}}</text> -->
-            <!-- <text
+            <text
               class="bar_text"
               :style="`transform: translate(${total_x_begin + 1}px, 3.5vw);`"
-            >{{num2text(data.diagnosis)}}</text> -->
+            >{{num2text(data.diagnosis)}}</text>
             <rect
               :x="total_x_begin"
               y="4.3vw"
@@ -88,10 +88,10 @@
               class="cure"
             />
             <!-- <text class="bar_text" y="6.6vw" :x="total_x_begin + 1">{{num2text(data.cure)}}</text> -->
-            <!-- <text
+            <text
               class="bar_text"
               :style="`transform: translate(${total_x_begin + 1}px, 6.6vw);`"
-            >{{num2text(data.cure)}}</text> -->
+            >{{num2text(data.cure)}}</text>
             <rect
               :x="total_x_begin + total_bar_width(data.cure)"
               y="4.3vw"
@@ -110,11 +110,11 @@
               :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
                 + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
             >{{num2text(data.death)}}</text> -->
-            <!-- <text
+            <text
               class="bar_text"
               :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
-                + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
-            >{{num2text(data.death)}}</text> -->
+                + ` -webkit-transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
+            >{{num2text(data.death)}}</text>
             <g :style="`transform: translate(${total_x_begin + total_x_step * 5}px, 5.2vw);`">
               <rect
                 :width="2.7 * total_x_step"
@@ -431,7 +431,7 @@
         </svg>
       </div>
 
-      <div class="description" style="margin-left: 3vw;">*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div>
+      <div class="description" style="margin-left: 3vw; margin-bottom: 5vw;">*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div>
       <!-- <div id="footer" style="height: 10vw;">
         <p>scroll-left: {{scroll_left}}; isIOS: {{isiOS}}</p>
         <p>select_date_id: {{select_date_id}}</p>
