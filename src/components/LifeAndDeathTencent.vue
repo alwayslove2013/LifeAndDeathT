@@ -9,7 +9,7 @@
     <!-- <div id="explanation">
       <div id="explanation_text">治愈率为该地区治愈人数在确诊人数中的占比。死亡率为该地区公布的死亡人数在确诊人数中的占比；</div>
     </div>-->
-
+    
     <div id="total">
       <div
         class="title"
@@ -39,7 +39,8 @@
               :d="index===(total_x_label[select_date_id].length - 1) ? `M${total_x_begin + (index+0.5)*total_x_step},5v${total_svg_height * 0.80}` : `M${total_x_begin + index*total_x_step},5v${total_svg_height * 0.80}`"
             />
           </g>
-          <g class="x_label"
+          <g
+            class="x_label"
             :style="`transform: translate(${total_x_begin}px, ${total_svg_height}px);`"
           >
             <text
@@ -59,12 +60,12 @@
             :style="`transform: translate(0, ${total_svg_height * 0.4 * index}px);`"
           >
             <text
-              style="transform: translate(2vw, 4vw)"
+              style="transform: translate(2vw, 4vw);"
               font-size="3.2vw"
               font-weight="500"
             >{{data.title_1}}</text>
             <text
-              style="transform: translate(1.2vw, 7vw)"
+              style="transform: translate(1.2vw, 7vw);"
               font-size="2.1333vw"
               fill="#888888"
             >{{data.title_2}}</text>
@@ -109,12 +110,12 @@
               class="bar_text"
               :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
                 + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
-            >{{num2text(data.death)}}</text> -->
+            >{{num2text(data.death)}}</text>-->
             <text
               class="bar_text"
-              :transform="`translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw)`"
+              :transform=" isiOS ? `translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw)` : ''"
               :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
-                + ` -webkit-transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
+                + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
             >{{num2text(data.death)}}</text>
             <!-- <g :style="`transform: translate(${total_x_begin + total_x_step * 5}px, 5.2vw);`">
               <rect
@@ -133,7 +134,7 @@
               <text :style="`transform: translate(${2.25 * total_x_step}px, 3vw); text-anchor: middle; font-size: 2.4vw`" class="death">
                 {{num2text(data.death)}}
               </text>
-            </g> -->
+            </g>-->
             <g
               id="页面1"
               stroke="none"
@@ -243,7 +244,7 @@
           <div
             v-for="(label, index) in add_y_label"
             :style="`margin-bottom: ${
-              index===0 ? 15.5 : 4.3
+              index===0 ? 14.8 : 3.8
             }vw; font-weight: ${label === 0 ? 600 : 400};`"
             :key="`${label}-${index}`"
           >{{num2text(label)}}{{index===0 ? '%':''}}</div>
@@ -432,13 +433,16 @@
         </svg>
       </div>
 
-      <div class="description" style="margin-left: 3vw; margin-bottom: 5vw;">*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div>
+      <div
+        class="description"
+        style="margin-left: 3vw; margin-bottom: 5vw;"
+      >*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div>
       <!-- <div id="footer" style="height: 10vw;">
         <p>scroll-left: {{scroll_left}}; isIOS: {{isiOS}}</p>
         <p>select_date_id: {{select_date_id}}</p>
         <p>select_date_id_bar: {{select_date_id_bar}}</p>
         <p>select_date_id_slider: {{select_date_id_slider}}</p>
-      </div> -->
+      </div>-->
     </div>
   </div>
 </template>
@@ -448,7 +452,7 @@ import * as d3 from "d3";
 import $ from "jquery";
 // import axios from "axios";
 export default {
-  name: "left-and-death-tencent",
+  name: "life-line-phone",
   data() {
     return {
       wuhan_dataset: [],
@@ -626,14 +630,26 @@ export default {
           let tmp = d.cure + d.death;
           if (tmp > gap_left) gap_left = tmp;
         });
+
         // console.log(gap_left, gap_right, max);
         gap_left = gap_left > 500 ? Math.ceil(gap_left / 1000) * 1000 : 500;
-        gap_right =
-          gap_right > 1000 ? Math.floor(gap_right / 1000) * 1000 : 500;
+
         max =
           max < 10000
             ? Math.ceil(max / 1000) * 1000
             : Math.ceil(max / 10000) * 10000;
+        if (gap_left > gap_right) {
+          gap_right = Math.max(Math.ceil(gap_left / 1000) * 1000, max - 10000);
+        }
+        if (gap_left < gap_right) {
+          gap_right =
+            gap_right > 1000 ? Math.floor(gap_right / 1000) * 1000 : 500;
+        }
+        if (gap_left === gap_right) {
+          gap_left += 1000;
+          gap_right = Math.max(Math.ceil(gap_left / 1000) * 1000, max - 10000);
+        }
+        max = Math.max(max, gap_right);
         // console.log(gap_left, gap_right, max);
 
         let tmp = [0];
@@ -677,7 +693,7 @@ export default {
     async initData_pku() {
       let getDataUrl = "https://tanshaocong.github.io/2019-nCoV/map.csv";
       let data_tmp = await d3.csv(getDataUrl);
-      // let data_tmp = await d3.csv("/map.csv");
+      // let data_tmp = await d3.csv("dist/map.csv");
       // console.log('get data from pku', data_tmp)
       let day_begin = 10;
       let month_begin = 1;
@@ -1099,7 +1115,10 @@ export default {
             that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
             // console.log('that.max_scroll_distance', that.max_scroll_distance)
             // that.gap = that.max_scroll_distance - tmp;
-            that.gap = Math.min(that.max_scroll_distance, Math.max(that.max_scroll_distance - tmp, 0));
+            that.gap = Math.min(
+              that.max_scroll_distance,
+              Math.max(that.max_scroll_distance - tmp, 0)
+            );
             let t = Math.round(that.gap / (that.add_x_step * 2));
             // console.log(t)
             that.select_date_id_bar = that.dataLens - that.showLens - t;
@@ -1112,7 +1131,10 @@ export default {
                   that.max_scroll_distance =
                     -that.dataViewWidth + that.add_svg_width;
                   // that.gap = that.max_scroll_distance - tmp;
-                  that.gap = Math.min(that.max_scroll_distance, Math.max(that.max_scroll_distance - tmp, 0));
+                  that.gap = Math.min(
+                    that.max_scroll_distance,
+                    Math.max(that.max_scroll_distance - tmp, 0)
+                  );
                   let t = Math.round(that.gap / (that.add_x_step * 2));
                   // that.select_date_id_bar = that.dataLens - that.showLens - t
                   // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
@@ -1134,7 +1156,10 @@ export default {
             that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
             // console.log('that.max_scroll_distance', that.max_scroll_distance)
             // that.gap = that.max_scroll_distance - tmp;
-            that.gap = Math.min(that.max_scroll_distance, Math.max(that.max_scroll_distance - tmp, 0));
+            that.gap = Math.min(
+              that.max_scroll_distance,
+              Math.max(that.max_scroll_distance - tmp, 0)
+            );
             let t = Math.round(that.gap / (that.add_x_step * 2));
             // console.log(t)
             that.select_date_id_bar = that.dataLens - that.showLens - t;
@@ -1147,7 +1172,10 @@ export default {
                   that.max_scroll_distance =
                     -that.dataViewWidth + that.add_svg_width;
                   // that.gap = that.max_scroll_distance - tmp;
-                  that.gap = Math.min(that.max_scroll_distance, Math.max(that.max_scroll_distance - tmp, 0));
+                  that.gap = Math.min(
+                    that.max_scroll_distance,
+                    Math.max(that.max_scroll_distance - tmp, 0)
+                  );
                   let t = Math.round(that.gap / (that.add_x_step * 2));
                   // that.select_date_id_bar = that.dataLens - that.showLens - t
                   // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
@@ -1368,9 +1396,9 @@ export default {
   // fill: #010604;
   // background: #010604;
   // color: #010604;
-  fill: #535B65;
-  background: #535B65;
-  color: #535B65;
+  fill: #535b65;
+  background: #535b65;
+  color: #535b65;
 }
 
 #head {
@@ -1494,7 +1522,7 @@ export default {
       transform: translateY(-50%);
       width: 4vw;
       height: 0.2vw;
-      border-bottom: 0.3vw dashed #535B65;
+      border-bottom: 0.3vw dashed #535b65;
     }
     .legend_icon_line {
       position: absolute;
