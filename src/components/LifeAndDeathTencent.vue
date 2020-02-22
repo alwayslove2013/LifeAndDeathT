@@ -2,30 +2,30 @@
   <div id="container">
     <div id="head">
       <div id="left_border" />
-      <div id="title">新冠肺炎疫情生死线</div>
-      <div id="description">(7:00-10:00为更新高峰，数据有滞后请谅解)</div>
+      <div id="title">新冠肺炎疫情生命线</div>
+      <div id="description">(7:00-10:00左右为数据更新高峰，显示可能略有滞后请谅解)</div>
     </div>
 
-    <div id="explanation">
-      <div id="explanation_text">病亡率为该地区公布的病亡人数在确诊人数中的占比；治愈率为该地区治愈人数在确诊人数中的占比。</div>
-    </div>
-
+    <!-- <div id="explanation">
+      <div id="explanation_text">治愈率为该地区治愈人数在确诊人数中的占比。死亡率为该地区公布的死亡人数在确诊人数中的占比；</div>
+    </div>-->
+    
     <div id="total">
       <div
         class="title"
-      >各地区累计治愈/病亡人数（{{date_list[select_date_id] ? date_list[select_date_id].month : ''}}月{{date_list[select_date_id] ? date_list[select_date_id].day : ''}}日）</div>
+      >各地区累计治愈/死亡病例数（{{date_list[select_date_id] ? date_list[select_date_id].month : ''}}月{{date_list[select_date_id] ? date_list[select_date_id].day : ''}}日）</div>
       <div id="legend">
         <div class="legend_part">
           <div class="death icon" />
-          <div class="legend_text">病亡人数</div>
+          <div class="legend_text">累计死亡</div>
         </div>
         <div class="legend_part">
           <div class="cure icon" />
-          <div class="legend_text">治愈人数</div>
+          <div class="legend_text">累计治愈</div>
         </div>
         <div class="legend_part">
           <div class="diagnosis icon" />
-          <div class="legend_text">确诊人数</div>
+          <div class="legend_text">累计确诊</div>
         </div>
       </div>
 
@@ -36,7 +36,7 @@
               v-for="(line, index) in total_x_label[select_date_id]"
               :key="line + `${index}`"
               class="total_label_line"
-              :d="index===(total_x_label[select_date_id].length - 1) ? `M${total_x_begin + (index+0.5)*total_x_step},5v${total_svg_height * 0.86}` : `M${total_x_begin + index*total_x_step},5v${total_svg_height * 0.86}`"
+              :d="index===(total_x_label[select_date_id].length - 1) ? `M${total_x_begin + (index+0.5)*total_x_step},5v${total_svg_height * 0.80}` : `M${total_x_begin + index*total_x_step},5v${total_svg_height * 0.80}`"
             />
           </g>
           <g
@@ -57,12 +57,18 @@
           <g
             v-for="(data, index) in total_dataset[select_date_id]"
             :key="data.title_1"
-            :style="`transform: translate(0, ${total_svg_height * 0.28 * index}px);`"
+            :style="`transform: translate(0, ${total_svg_height * 0.4 * index}px);`"
           >
-            <text style="transform: translate(0, 4vw)">
-              <tspan x="2vw" font-size="3.2vw" font-weight="500">{{data.title_1}}</tspan>
-              <tspan x="1.3vw" dy="3vw" font-size="2.1vw" fill="#888888">{{data.title_2}}</tspan>
-            </text>
+            <text
+              style="transform: translate(2vw, 4vw);"
+              font-size="3.2vw"
+              font-weight="500"
+            >{{data.title_1}}</text>
+            <text
+              style="transform: translate(1.2vw, 7vw);"
+              font-size="2.1333vw"
+              fill="#888888"
+            >{{data.title_2}}</text>
             <rect
               :x="total_x_begin"
               y="1.3vw"
@@ -70,7 +76,11 @@
               height="3vw"
               class="diagnosis"
             />
-            <text class="bar_text" y="3.5vw" :x="total_x_begin + 1">{{num2text(data.diagnosis)}}</text>
+            <!-- <text class="bar_text" y="3.5vw" :x="total_x_begin + 1">{{num2text(data.diagnosis)}}</text> -->
+            <text
+              class="bar_text"
+              :style="`transform: translate(${total_x_begin + 1}px, 3.5vw);`"
+            >{{num2text(data.diagnosis)}}</text>
             <rect
               :x="total_x_begin"
               y="4.3vw"
@@ -78,7 +88,11 @@
               height="3vw"
               class="cure"
             />
-            <text class="bar_text" y="6.6vw" :x="total_x_begin + 1">{{num2text(data.cure)}}</text>
+            <!-- <text class="bar_text" y="6.6vw" :x="total_x_begin + 1">{{num2text(data.cure)}}</text> -->
+            <text
+              class="bar_text"
+              :style="`transform: translate(${total_x_begin + 1}px, 6.6vw);`"
+            >{{num2text(data.cure)}}</text>
             <rect
               :x="total_x_begin + total_bar_width(data.cure)"
               y="4.3vw"
@@ -86,18 +100,47 @@
               height="3vw"
               class="death"
             />
-            <text
+            <!-- <text
               class="bar_text"
               y="6.7vw"
               :style="data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end;` : ''"
               :x="data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1"
+            >{{num2text(data.death)}}</text>-->
+            <!-- <text
+              class="bar_text"
+              :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
+                + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
+            >{{num2text(data.death)}}</text>-->
+            <text
+              class="bar_text"
+              :transform=" isiOS ? `translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw)` : ''"
+              :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
+                + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
             >{{num2text(data.death)}}</text>
+            <!-- <g :style="`transform: translate(${total_x_begin + total_x_step * 5}px, 5.2vw);`">
+              <rect
+                :width="2.7 * total_x_step"
+                height="4vw"
+                fill="rgba(136, 136, 128, 0.05)"
+                :rx="total_x_step * 0.1"
+                :ry="total_x_step * 0.1"
+                />
+              <text :style="`transform: translate(${0.55 * total_x_step}px, 3vw); text-anchor: middle; font-size: 2.4vw`" class="diagnosis">
+                {{num2text(data.diagnosis)}}
+              </text>
+              <text :style="`transform: translate(${1.45 * total_x_step}px, 3vw); text-anchor: middle; font-size: 2.4vw`" class="cure">
+                {{num2text(data.cure)}}
+              </text>
+              <text :style="`transform: translate(${2.25 * total_x_step}px, 3vw); text-anchor: middle; font-size: 2.4vw`" class="death">
+                {{num2text(data.death)}}
+              </text>
+            </g>-->
             <g
               id="页面1"
               stroke="none"
               stroke-width="1"
               fill="none"
-              :style="`transform: translate(${total_x_begin + total_x_step * (total_x_label[select_date_id].length - 2.8)}px, 0) scale(${total_svg_width / 800})`"
+              :style="`transform: translate(${total_x_begin + total_x_step * (total_x_label[select_date_id].length - 2.8)}px, -0.5vw) scale(${total_svg_width / 800})`"
               fill-rule="evenodd"
             >
               <g id="手机" transform="translate(-528.000000, -748.000000)" fill="#FFFFFF">
@@ -170,11 +213,11 @@
         </svg>
       </div>
 
-      <div class="discription">*符号“//”一般用于数据差异过大时隔断坐标轴</div>
+      <div class="description">*锯齿线用于数据差异过大时隔断坐标轴</div>
     </div>
 
-    <div id="add" style="margin-top: 10vw;">
-      <div class="title">全国新增治愈/病亡人数</div>
+    <div id="add" style="margin-top: 6.67vw;">
+      <div class="title">全国新增治愈/死亡病例数</div>
       <div id="legend" style="margin-top: 3vw;">
         <div class="legend_part">
           <div class="legend_line_cure"></div>
@@ -184,15 +227,15 @@
         <div class="legend_part">
           <div class="legend_line_death"></div>
           <div class="legend_icon_line death"></div>
-          <div class="legend_text_line">病亡率</div>
+          <div class="legend_text_line">病死率</div>
         </div>
         <div class="legend_part">
           <div class="legend_icon cure"></div>
-          <div class="legend_text">治愈人数</div>
+          <div class="legend_text">新增治愈</div>
         </div>
         <div class="legend_part">
           <div class="legend_icon death"></div>
-          <div class="legend_text">病亡人数</div>
+          <div class="legend_text">新增死亡</div>
         </div>
       </div>
 
@@ -201,7 +244,7 @@
           <div
             v-for="(label, index) in add_y_label"
             :style="`margin-bottom: ${
-              index===0 ? 14.8 : 4.3
+              index===0 ? 14.8 : 3.8
             }vw; font-weight: ${label === 0 ? 600 : 400};`"
             :key="`${label}-${index}`"
           >{{num2text(label)}}{{index===0 ? '%':''}}</div>
@@ -257,11 +300,11 @@
               <g id="line-chart">
                 <path
                   :d="cure_rect_path"
-                  stroke-dasharray="0.4vw 0.4vw"
+                  stroke-dasharray="3 3"
                   style="stroke: #62c298; stroke-width: 0.2vw; fill: none;"
                 />
                 <path
-                  style="fill: rgba(121, 192, 155, 0.14);rgba(51, 51, 51, 0.1);"
+                  style="fill: rgba(121, 192, 155, 0.14);"
                   :d="cure_rect_path ==='' ? '' : `${cure_rect_path}L${add_x_step * (country_dataset.length * 2 - 1)},${add_y_step * 3}H${add_x_step}`"
                 />
                 <rect
@@ -277,7 +320,7 @@
                 />
                 <path
                   :d="death_rect_path"
-                  stroke-dasharray="0.4vw 0.4vw"
+                  stroke-dasharray="3 3"
                   style="stroke: #333333; stroke-width: 0.2vw; fill: none;"
                 />
                 <path
@@ -359,9 +402,9 @@
               <g id="x-label">
                 <text
                   v-for="(date, index) in date_list"
-                  :style="`text-anchor: middle; font-size: ${index === select_date_id ? 3.2 : 2.4}vw; transform: translateY(${index === select_date_id ? 0.2 : 0}vw); font-weight: ${index === select_date_id ? 500 : 400}; fill: ${index === select_date_id ? '#00BAD1' : '#333333'}; transition: ease 0.2s;`"
+                  :style="index===select_date_id ? `text-anchor: middle; font-size: 2.4vw; font-weight: 500; fill: '#333333'; transform: translate(0, 0.1vw); transition: ease 0.2s;` : `text-anchor: middle; font-size: 2.1333333vw; font-weight: 400; fill: '#333333';`"
                   :x="add_x_step * (2 * index + 1)"
-                  :y="6.65 * add_y_step"
+                  :y="6.6 * add_y_step"
                   :key="`${date.month}-${date.day}`"
                 >{{`${date.month}/${date.day}`}}</text>
               </g>
@@ -373,16 +416,33 @@
       <div id="slider">
         <svg id="slider_svg" width="100%" height="100%">
           <defs>
-            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-              <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#00bad1" />
+            <linearGradient id="slider_linear">
+              <stop offset="15%" style="stop-color:#60cad7; stop-opacity: 1" />
+              <stop offset="95%" style="stop-color:#00bad1; stop-opacity: 1" />
+            </linearGradient>
+            <filter id="shadow" x="-5%" y="0%" width="110%" height="120%">
+              <feDropShadow
+                dx="0"
+                dy="0.6"
+                stdDeviation="1.2"
+                flood-color="#00B9D1"
+                flood-opacity="0.6"
+              />
             </filter>
           </defs>
         </svg>
       </div>
 
-      <div class="discription" style="margin-left: 3vw;">*拖动图表查看早期数据，移动滑块选择具体日期，条形图也会随日期变化</div>
-
-      <div id="footer" style="height: 10vw;"></div>
+      <div
+        class="description"
+        style="margin-left: 3vw; margin-bottom: 5vw;"
+      >*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div>
+      <!-- <div id="footer" style="height: 10vw;">
+        <p>scroll-left: {{scroll_left}}; isIOS: {{isiOS}}</p>
+        <p>select_date_id: {{select_date_id}}</p>
+        <p>select_date_id_bar: {{select_date_id_bar}}</p>
+        <p>select_date_id_slider: {{select_date_id_slider}}</p>
+      </div>-->
     </div>
   </div>
 </template>
@@ -392,7 +452,7 @@ import * as d3 from "d3";
 import $ from "jquery";
 // import axios from "axios";
 export default {
-  name: "left-and-death-tencent",
+  name: "life-line-phone",
   data() {
     return {
       wuhan_dataset: [],
@@ -425,7 +485,9 @@ export default {
       max_scroll_distance: 0,
       gap: 0,
       hightlight_rect: {},
-      bold_line_index_list: [0, 1, 4, 5]
+      bold_line_index_list: [0, 1, 4, 5],
+      scroll_left: 0,
+      isiOS: 0
     };
   },
   watch: {
@@ -541,19 +603,19 @@ export default {
         .select(".life_svg_div")
         .node()
         .getBoundingClientRect();
-      console.log(".life_svg_div", tmp)
+      // console.log(".life_svg_div", tmp)
       let add_svg_div_rect = d3
         .select(".life_svg_div_big")
         .node()
         .getBoundingClientRect();
-      this.add_svg_width = tmp.width * this.dataLens / this.showLens;
+      this.add_svg_width = (tmp.width * this.dataLens) / this.showLens;
       // this.add_svg_width = add_svg_div_rect.width;
       this.add_svg_height = add_svg_div_rect.height;
       this.add_y_step = this.add_svg_height / 9.5;
-      this.add_x_step = this.add_svg_width / 2 / (this.dataLens + 0.5);
+      this.add_x_step = this.add_svg_width / 2 / (this.dataLens + 0.2);
       this.add_x_end = this.add_svg_width - 2 * this.dataLens * this.add_x_step;
-      console.log('add_svg_div_rect', add_svg_div_rect);
-      console.log('this.add_x_step', this.add_x_step)
+      // console.log('add_svg_div_rect', add_svg_div_rect);
+      // console.log('this.add_x_step', this.add_x_step)
     },
     compute_total_x_label(dataset) {
       let total_x_label = [];
@@ -568,14 +630,26 @@ export default {
           let tmp = d.cure + d.death;
           if (tmp > gap_left) gap_left = tmp;
         });
+
         // console.log(gap_left, gap_right, max);
         gap_left = gap_left > 500 ? Math.ceil(gap_left / 1000) * 1000 : 500;
-        gap_right =
-          gap_right > 1000 ? Math.floor(gap_right / 1000) * 1000 : 500;
+
         max =
           max < 10000
             ? Math.ceil(max / 1000) * 1000
             : Math.ceil(max / 10000) * 10000;
+        if (gap_left > gap_right) {
+          gap_right = Math.max(Math.ceil(gap_left / 1000) * 1000, max - 10000);
+        }
+        if (gap_left < gap_right) {
+          gap_right =
+            gap_right > 1000 ? Math.floor(gap_right / 1000) * 1000 : 500;
+        }
+        if (gap_left === gap_right) {
+          gap_left += 1000;
+          gap_right = Math.max(Math.ceil(gap_left / 1000) * 1000, max - 10000);
+        }
+        max = Math.max(max, gap_right);
         // console.log(gap_left, gap_right, max);
 
         let tmp = [0];
@@ -604,7 +678,7 @@ export default {
       max_rate = Math.ceil((max_rate * 100) / 5) * 5;
       max_cure = Math.ceil(max_cure / 400) * 400;
       max_death = Math.ceil(max_death / 400) * 400;
-      console.log(max_rate, max_cure, max_death);
+      // console.log(max_rate, max_cure, max_death);
       this.add_y_label = [
         max_rate,
         0,
@@ -619,7 +693,7 @@ export default {
     async initData_pku() {
       let getDataUrl = "https://tanshaocong.github.io/2019-nCoV/map.csv";
       let data_tmp = await d3.csv(getDataUrl);
-      // let data_tmp = await d3.csv("/map.csv");
+      // let data_tmp = await d3.csv("dist/map.csv");
       // console.log('get data from pku', data_tmp)
       let day_begin = 10;
       let month_begin = 1;
@@ -806,7 +880,7 @@ export default {
       this.set_total_svg_params();
       this.set_add_svg_params();
       // console.log('total_svg params is ok')
-      this.set_slider();
+      // this.set_slider();
       // console.log('slider is ok')
     },
     async getCountryDataset(test_url, month_begin = 1, day_begin = 20) {
@@ -825,7 +899,6 @@ export default {
         body: JSON.stringify(body)
       };
       let data = await d3.json(test_url, request);
-      console.log(data.args.rsp, data.args.rsp);
       let country_data = data.args.rsp;
       let country_dataset = [];
       country_data.chinaHistoryTotal.forEach(d => {
@@ -878,7 +951,9 @@ export default {
           hubei_dataset.push({
             total_cure: d.heal,
             total_death: d.dead,
-            total_diagnosis: d.confirm
+            total_diagnosis: d.confirm,
+            month,
+            day
           });
         }
       });
@@ -900,7 +975,7 @@ export default {
         body: JSON.stringify(body)
       };
       let data = await d3.json(test_url, request);
-      console.log(data.args.rsp.cityHistory[0], month_begin, day_begin);
+      // console.log(data.args.rsp.cityHistory[0], month_begin, day_begin);
       let wuhan_dataset = [];
       data.args.rsp.cityHistory[0].history.forEach(d => {
         let day = +d["day"].split(".")[1];
@@ -915,30 +990,26 @@ export default {
       });
       return wuhan_dataset;
     },
-    getTotalDatatest(country_dataset, hubei_dataset, wuhan_dataset) {
+    getTotalDatatest(country_dataset, hubei_dataset) {
       let total_dataset = [];
       country_dataset.forEach((country_data, index) => {
-        let wuhan_data = wuhan_dataset[index];
+        // let wuhan_data = wuhan_dataset[index];
         let hubei_data = hubei_dataset[index];
 
-        let wuhan = {
-          title_1: "武汉",
-          title_2: "",
-          death: wuhan_data["total_death"],
-          cure: wuhan_data["total_cure"],
-          diagnosis: wuhan_data["total_diagnosis"]
-        };
+        // let wuhan = {
+        //   title_1: "武汉",
+        //   title_2: "",
+        //   death: wuhan_data["total_death"],
+        //   cure: wuhan_data["total_cure"],
+        //   diagnosis: wuhan_data["total_diagnosis"]
+        // };
 
         let hubei_not_wuhan = {
           title_1: "湖北",
-          title_2: "(除武汉)",
-          death: hubei_data["total_death"] - wuhan_data["total_death"],
-          cure:
-            hubei_data["total_cure"] - wuhan_data["total_cure"] < 0
-              ? 0
-              : hubei_data["total_cure"] - wuhan_data["total_cure"],
-          diagnosis:
-            hubei_data["total_diagnosis"] - wuhan_data["total_diagnosis"]
+          title_2: "",
+          death: hubei_data["total_death"],
+          cure: hubei_data["total_cure"],
+          diagnosis: hubei_data["total_diagnosis"]
         };
 
         let country_not_hubei = {
@@ -950,7 +1021,7 @@ export default {
             country_data["total_diagnosis"] - hubei_data["total_diagnosis"]
         };
 
-        total_dataset.push([wuhan, hubei_not_wuhan, country_not_hubei]);
+        total_dataset.push([hubei_not_wuhan, country_not_hubei]);
       });
       return total_dataset;
     },
@@ -962,31 +1033,45 @@ export default {
       Promise.all([
         this.getCountryDataset(url),
         this.getHubeiDataset(url),
-        this.getWuhanDataset(url)
+        // this.getWuhanDataset(url)
       ]).then(d => {
-        this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
-        console.log("dataLens", this.dataLens)
+        // this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
+        this.dataLens = Math.min(d[0].length, d[1].length);
+
+        let country_flag = 0;
+        let hubei_flag = 0;
+        let last_hubei = d[1][d[1].length - 1];
+        let last_country = d[0][d[0].length - 1];
+        if (last_hubei.day - last_country.day === 1) {
+          hubei_flag = 1;
+        }
+        if (last_hubei.day - last_country.day === -1) {
+          country_flag = 1;
+        }
+
+        // console.log("dataLens", this.dataLens)
         let country_dataset = d[0].splice(
-          d[0].length - this.dataLens,
+          d[0].length - this.dataLens - country_flag,
           this.dataLens
         );
         this.country_dataset = country_dataset;
         // console.log("country_dataset", country_dataset);
+
         let hubei_dataset = d[1].splice(
-          d[1].length - this.dataLens,
+          d[1].length - this.dataLens - hubei_flag,
           this.dataLens
         );
         // console.log("hubei_dataset", hubei_dataset);
-        let wuhan_dataset = d[2].splice(
-          d[2].length - this.dataLens,
-          this.dataLens
-        );
+        // let wuhan_dataset = d[2].splice(
+        //   d[2].length - this.dataLens,
+        //   this.dataLens
+        // );
         // console.log("wuhan_dataset", wuhan_dataset);
 
         let total_dataset = this.getTotalDatatest(
           country_dataset,
           hubei_dataset,
-          wuhan_dataset
+          // wuhan_dataset
         );
         // console.log("total_dataset", total_dataset);
         this.total_dataset = total_dataset;
@@ -1005,41 +1090,140 @@ export default {
         this.set_total_svg_params();
         this.set_add_svg_params();
         this.set_slider();
-        let that = this;
-    let timer = null;
-    $(".life_svg_div").scroll(function() {
-      clearTimeout(timer);
-      // console.log("???");
-      // console.log(this.scrollLeft);
-      that.test = this.scrollLeft;
-      let tmp = this.scrollLeft;
-      that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-      that.gap = that.max_scroll_distance - tmp;
-      let t = Math.round(that.gap / (that.add_x_step * 2));
-      that.select_date_id_bar = that.dataLens - that.showLens - t;
-      that.select_date_id =
-        that.select_date_id_bar + that.select_date_id_slider;
-      timer = setTimeout(
-        tmp => {
-          // console.log(tmp);
-          if (tmp === that.test) {
+        // this.set_scroll_by_jquery();
+        this.set_scroll_by_addEvent();
+        this.dataViewWidth = d3
+          .select(".life_svg_div")
+          .node()
+          .getBoundingClientRect().width;
+      });
+    },
+    set_scroll_by_addEvent() {
+      // console.log("set_scroll_by_addEvent Begin!!!!");
+      let that = this;
+      let timer = null;
+      document
+        .querySelector(".life_svg_div")
+        .addEventListener("scroll", function(e) {
+          // console.log("==========", e, e.target, e.target.scrollLeft);
+          // console.log(e.target.scrollWidth, e.target.clientWidth);
+          if (!that.isiOS) {
+            that.scroll_left = e.target.scrollLeft;
+            // console.log(timer)
+            clearTimeout(timer);
+            let tmp = that.scroll_left;
             that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-            that.gap = that.max_scroll_distance - tmp;
+            // console.log('that.max_scroll_distance', that.max_scroll_distance)
+            // that.gap = that.max_scroll_distance - tmp;
+            that.gap = Math.min(
+              that.max_scroll_distance,
+              Math.max(that.max_scroll_distance - tmp, 0)
+            );
             let t = Math.round(that.gap / (that.add_x_step * 2));
-            // that.select_date_id_bar = that.dataLens - that.showLens - t
-            // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
-            let fix_tmp = that.max_scroll_distance - t * (that.add_x_step * 2);
-            this.scrollLeft = fix_tmp;
+            // console.log(t)
+            that.select_date_id_bar = that.dataLens - that.showLens - t;
+            that.select_date_id =
+              that.select_date_id_bar + that.select_date_id_slider;
+            timer = setTimeout(
+              tmp => {
+                // console.log(tmp);
+                if (tmp === that.scroll_left) {
+                  that.max_scroll_distance =
+                    -that.dataViewWidth + that.add_svg_width;
+                  // that.gap = that.max_scroll_distance - tmp;
+                  that.gap = Math.min(
+                    that.max_scroll_distance,
+                    Math.max(that.max_scroll_distance - tmp, 0)
+                  );
+                  let t = Math.round(that.gap / (that.add_x_step * 2));
+                  // that.select_date_id_bar = that.dataLens - that.showLens - t
+                  // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+                  let fix_tmp =
+                    that.max_scroll_distance - t * (that.add_x_step * 2);
+                  e.target.scrollLeft = fix_tmp;
+                }
+              },
+              100,
+              tmp
+            );
           }
-        },
-        100,
-        tmp
-      );
-    });
-    this.dataViewWidth = d3
-      .select(".life_svg_div")
-      .node()
-      .getBoundingClientRect().width;
+          if (that.isiOS) {
+            that.scroll_left =
+              e.target.scrollLeft + e.target.scrollWidth - e.target.clientWidth;
+            // console.log(timer)
+            clearTimeout(timer);
+            let tmp = that.scroll_left;
+            that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+            // console.log('that.max_scroll_distance', that.max_scroll_distance)
+            // that.gap = that.max_scroll_distance - tmp;
+            that.gap = Math.min(
+              that.max_scroll_distance,
+              Math.max(that.max_scroll_distance - tmp, 0)
+            );
+            let t = Math.round(that.gap / (that.add_x_step * 2));
+            // console.log(t)
+            that.select_date_id_bar = that.dataLens - that.showLens - t;
+            that.select_date_id =
+              that.select_date_id_bar + that.select_date_id_slider;
+            timer = setTimeout(
+              tmp => {
+                // console.log(tmp);
+                if (tmp === that.scroll_left) {
+                  that.max_scroll_distance =
+                    -that.dataViewWidth + that.add_svg_width;
+                  // that.gap = that.max_scroll_distance - tmp;
+                  that.gap = Math.min(
+                    that.max_scroll_distance,
+                    Math.max(that.max_scroll_distance - tmp, 0)
+                  );
+                  let t = Math.round(that.gap / (that.add_x_step * 2));
+                  // that.select_date_id_bar = that.dataLens - that.showLens - t
+                  // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+                  let fix_tmp =
+                    that.max_scroll_distance - t * (that.add_x_step * 2);
+                  e.target.scrollLeft =
+                    fix_tmp - e.target.scrollWidth + e.target.clientWidth;
+                }
+              },
+              100,
+              tmp
+            );
+          }
+        });
+    },
+    set_scroll_by_jquery() {
+      let that = this;
+      let timer = null;
+      $(".life_svg_div").scroll(function() {
+        clearTimeout(timer);
+        // console.log("???");
+        // console.log(this.scrollLeft);
+        that.scroll_left = this.scrollLeft;
+        let tmp = this.scrollLeft;
+        that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
+        that.gap = that.max_scroll_distance - tmp;
+        let t = Math.round(that.gap / (that.add_x_step * 2));
+        that.select_date_id_bar = that.dataLens - that.showLens - t;
+        that.select_date_id =
+          that.select_date_id_bar + that.select_date_id_slider;
+        timer = setTimeout(
+          tmp => {
+            // console.log(tmp);
+            if (tmp === that.scroll_left) {
+              that.max_scroll_distance =
+                -that.dataViewWidth + that.add_svg_width;
+              that.gap = that.max_scroll_distance - tmp;
+              let t = Math.round(that.gap / (that.add_x_step * 2));
+              // that.select_date_id_bar = that.dataLens - that.showLens - t
+              // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
+              let fix_tmp =
+                that.max_scroll_distance - t * (that.add_x_step * 2);
+              this.scrollLeft = fix_tmp;
+            }
+          },
+          100,
+          tmp
+        );
       });
     },
     set_slider() {
@@ -1084,18 +1268,28 @@ export default {
           .style("stroke-width", height * 0.2)
           .style("stroke-linecap", "round");
         // .classed("slider-container", true);
+        let bar_g = g.append("g");
+        let bars = [0, 1, 2];
+        bar_g
+          .append("rect")
+          .attr("x", w * total - w * 1.2)
+          .attr("y", height / 2 - h * 0.25)
+          .attr("width", w * 1.4)
+          .attr("height", h * 0.75)
+          .attr("class", "bar_g")
+          .attr("rx", w * 0.12)
+          .attr("ry", w * 0.12)
+          .classed("slider-rect-shadow", true);
         let target = g
           .append("rect")
           .attr("x", w * total - w * 1.2)
           .attr("y", height / 2 - h / 2)
           .attr("width", w * 1.4)
           .attr("height", h)
-          .attr("rx", w * 0.2)
-          .attr("ry", w * 0.2)
+          .attr("rx", w * 0.12)
+          .attr("ry", w * 0.12)
           .classed("slider-rect", true);
-        let bar_g = g.append("g");
-        let bars = [0, 1, 2];
-        bar_g
+        g.append("g")
           .selectAll("rect")
           .data(bars)
           .enter()
@@ -1107,7 +1301,7 @@ export default {
           .attr("y", height / 2 - h * 0.23)
           .attr("width", 0.04 * w)
           .attr("height", 0.46 * h)
-          .style("fill", "white")
+          .style("fill", "#ffffff")
           .attr("rx", 0.02 * w)
           .attr("ry", 0.02 * w);
         target.call(
@@ -1140,52 +1334,28 @@ export default {
   mounted() {
     // this.initData_pku();
     this.initData_tencent();
-    // moveTo Tecent
-    // let that = this;
-    // let timer = null;
-    // $(".life_svg_div").scroll(function() {
-    //   clearTimeout(timer);
-    //   // console.log("???");
-    //   // console.log(this.scrollLeft);
-    //   that.test = this.scrollLeft;
-    //   let tmp = this.scrollLeft;
-    //   that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-    //   that.gap = that.max_scroll_distance - tmp;
-    //   let t = Math.round(that.gap / (that.add_x_step * 2));
-    //   that.select_date_id_bar = that.dataLens - that.showLens - t;
-    //   that.select_date_id =
-    //     that.select_date_id_bar + that.select_date_id_slider;
-    //   timer = setTimeout(
-    //     tmp => {
-    //       // console.log(tmp);
-    //       if (tmp === that.test) {
-    //         that.max_scroll_distance = -that.dataViewWidth + that.add_svg_width;
-    //         that.gap = that.max_scroll_distance - tmp;
-    //         let t = Math.round(that.gap / (that.add_x_step * 2));
-    //         // that.select_date_id_bar = that.dataLens - that.showLens - t
-    //         // that.select_date_id =  that.select_date_id_bar + that.select_date_id_slider
-    //         let fix_tmp = that.max_scroll_distance - t * (that.add_x_step * 2);
-    //         this.scrollLeft = fix_tmp;
-    //       }
-    //     },
-    //     100,
-    //     tmp
-    //   );
-    // });
-    // this.dataViewWidth = d3
-    //   .select(".life_svg_div")
-    //   .node()
-    //   .getBoundingClientRect().width;
-    // setTimeout(() => {
-    //   console.log('scroll')
-    //   $(".life_svg_div").scrollLeft = 100;
-    // }, 1000)
+    if (/(iPhone|iPad|iPod|iOS|Mac)/i.test(navigator.userAgent)) {
+      if (
+        /Safari/.test(navigator.userAgent) &&
+        /Chrome/.test(navigator.userAgent)
+      ) {
+        this.isiOS = 0;
+      } else {
+        // console.log("isIOS");
+        this.isiOS = 1;
+      }
+    }
+    let u = navigator.userAgent;
+    let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    if (isIOS) {
+      this.isiOS = 1;
+    }
   }
 };
 </script>
 
 <style lang="less">
-@border: 8.53333333333333vw;
+@border: 40/7.5vw;
 #container {
   position: absolute;
   left: @border;
@@ -1196,11 +1366,11 @@ export default {
 
 .title {
   font-weight: 500;
-  font-size: 3.5vw;
+  font-size: 28 / 7.5vw;
 }
 
 .label_text {
-  font-size: 18 / 7.5vw;
+  font-size: 16 / 7.5vw;
   fill: #919191;
   text-anchor: middle;
 }
@@ -1223,32 +1393,37 @@ export default {
 }
 
 .death {
-  fill: #010604;
-  background: #010604;
-  color: #010604;
+  // fill: #010604;
+  // background: #010604;
+  // color: #010604;
+  fill: #535b65;
+  background: #535b65;
+  color: #535b65;
 }
 
 #head {
-  margin-top: 40 /7.5vw;
+  margin-top: 50 / 7.5vw;
   vertical-align: middle;
   #left_border {
-    margin-top: 6 /7.5vw;
-    height: 34 /7.5vw;
+    // position: absolute;
+    margin-top: 1.2vw;
+    float: left;
+    height: 4.3vw;
     width: 7 /7.5vw;
     border-radius: 3.5 /7.5vw;
     background: #00bad1;
-    float: left;
   }
   #title {
-    margin-left: 16 /7.5vw;
-    font-size: 40 /7.5vw;
+    padding-left: 18 /7.5vw;
+    font-size: 4.8vw;
     font-weight: 600;
     color: #333333;
+    // border-left: 1vw solid #00bad1;
   }
   #description {
-    margin-top: 5 /7.5vw;
-    margin-left: 18 /7.5vw;
-    font-size: 20 /7.5vw;
+    margin-top: 1vw;
+    margin-left: 19 /7.5vw;
+    font-size: 2.8vw;
     color: #888888;
   }
 }
@@ -1272,17 +1447,17 @@ export default {
   }
 }
 
-.discription {
+.description {
   margin-top: 2vw;
   margin-left: 1.5vw;
   color: #b2b2b2;
-  font-size: 2.2vw;
+  font-size: 2.13333vw;
 }
 
 #total {
-  margin-top: 60 /7.5vw;
+  margin-top: 50 / 7.5vw;
   #legend {
-    margin-top: 20 /7.5vw;
+    margin-top: 4vw;
     height: 20 /7.5vw;
     .legend_part {
       float: right;
@@ -1297,7 +1472,7 @@ export default {
         width: 18 /7.5vw;
         height: 18 /7.5vw;
         float: left;
-        margin-top: 3 /7.5vw;
+        margin-top: 4 /7.5vw;
         border-radius: 0.4vw;
       }
     }
@@ -1305,7 +1480,7 @@ export default {
   #total_svg_div {
     margin-top: 4vw;
     width: 100%;
-    height: 40vw;
+    height: 25vw;
     // background: rgba(142, 170, 142, 0.2);
     // #total_svg {
 
@@ -1333,7 +1508,7 @@ export default {
     }
     .legend_line_cure {
       position: absolute;
-      top: 50%;
+      top: 48%;
       left: 4vw;
       transform: translateY(-50%);
       width: 4vw;
@@ -1342,12 +1517,12 @@ export default {
     }
     .legend_line_death {
       position: absolute;
-      top: 50%;
+      top: 48%;
       left: 4vw;
       transform: translateY(-50%);
       width: 4vw;
       height: 0.2vw;
-      border-bottom: 0.3vw dashed #010604;
+      border-bottom: 0.3vw dashed #535b65;
     }
     .legend_icon_line {
       position: absolute;
@@ -1355,7 +1530,7 @@ export default {
       left: 8vw;
       transform: translateY(-50%);
       width: 1.6vw;
-      height: 1.6vw;
+      height: 1.8vw;
       border-radius: 0.4vw;
     }
     .legend_text_line {
@@ -1364,6 +1539,7 @@ export default {
       left: 11vw;
       transform: translateY(-50%);
       font-size: 2.5vw;
+      line-height: 2.8vw;
       height: 3vw;
       width: 12vw;
     }
@@ -1382,12 +1558,12 @@ export default {
       left: 8vw;
       transform: translateY(-50%);
       font-size: 2.5vw;
-      height: 3vw;
+      line-height: 2.8vw;
       width: 12vw;
     }
   }
   .life_div {
-    margin-top: 10px;
+    margin-top: 0;
     width: 100%;
     height: 70vw;
     // border: 1px red solid;
@@ -1399,9 +1575,9 @@ export default {
       height: 100%;
       // background: rgba(142, 170, 142, 0.1);
       text-align: right;
-      font-size: 2.5vw;
+      font-size: 18/7.5vw;
       color: #888888;
-      margin-top: 3vw;
+      margin-top: 2.4vw;
     }
     .life_svg_div {
       // position: relative;
@@ -1430,9 +1606,9 @@ export default {
   }
 
   #slider {
-    margin-left: 6.5%;
+    margin-left: 7.2%;
     margin-top: 0vw;
-    width: 93%;
+    width: 94.8%;
     height: 7vw;
     // border: 1px solid red;
     position: relative;
@@ -1452,7 +1628,14 @@ export default {
 
 .slider-rect {
   // box-shadow: 0 0 5vw 0 rgba(0, 0, 0, 0.5);
-  fill: #00bad1;
+  fill: url(#slider_linear);
+  // filter: url(#shadow);
+}
+
+.slider-rect-shadow {
+  // box-shadow: 0 0 5vw 0 rgba(0, 0, 0, 0.5);
+  // fill: url(#slider_linear);
   filter: url(#shadow);
+  fill: #00bad1;
 }
 </style>
