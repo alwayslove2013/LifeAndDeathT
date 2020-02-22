@@ -1,6 +1,7 @@
 module.exports = {
 	// 基本路径
     publicPath: './',
+    outputDir: 'docs',
     devServer: {
         port: 12357,
         // https: false,
