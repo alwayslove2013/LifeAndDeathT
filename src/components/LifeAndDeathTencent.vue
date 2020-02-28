@@ -113,9 +113,9 @@
             >{{num2text(data.death)}}</text>-->
             <text
               class="bar_text"
-              :transform=" isiOS ? `translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw)` : ''"
-              :style="(data.death / total_x_label[select_date_id][5] < 0.1 ? `text-anchor: end; ` : '')
-                + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.1 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
+              :transform=" isiOS ? `translate(${data.death / total_x_label[select_date_id][5] > 0.18 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw)` : ''"
+              :style="(data.death / total_x_label[select_date_id][5] < 0.18 ? `text-anchor: end; ` : '')
+                + ` transform: translate(${data.death / total_x_label[select_date_id][5] > 0.18 ? total_x_begin + total_bar_width(data.cure) + 1 : total_x_begin + total_bar_width(data.cure) + total_bar_width(data.death) - 1}px, 6.6vw);`"
             >{{num2text(data.death)}}</text>
             <!-- <g :style="`transform: translate(${total_x_begin + total_x_step * 5}px, 5.2vw);`">
               <rect
@@ -883,7 +883,7 @@ export default {
       // this.set_slider();
       // console.log('slider is ok')
     },
-    async getCountryDataset(test_url, month_begin = 1, day_begin = 20) {
+    async getCountryDataset(test_url, month_begin = 1, day_begin = 21) {
       let body = {
         args: {
           req: {
@@ -899,6 +899,7 @@ export default {
         body: JSON.stringify(body)
       };
       let data = await d3.json(test_url, request);
+      // console.log('country_d', data)
       let country_data = data.args.rsp;
       let country_dataset = [];
       country_data.chinaHistoryTotal.forEach(d => {
@@ -916,14 +917,18 @@ export default {
           });
         }
       });
-      country_data.modifyHistoryTotal.forEach((d, i) => {
+      // console.log('country_dataset', country_dataset)
+      let t = 0;
+      country_data.modifyHistoryTotal.forEach((d) => {
         let day = +d["day"].split(".")[1];
         let month = +d["day"].split(".")[0];
         if (month > month_begin || (month == month_begin && day >= day_begin)) {
-          country_dataset[i]["cure"] = d.heal;
-          country_dataset[i]["death"] = d.dead;
+          country_dataset[t]["cure"] = d.heal;
+          country_dataset[t]["death"] = d.dead;
+          t++;
         }
       });
+      // console.log('country', data)
       return country_dataset;
     },
     async getHubeiDataset(test_url, month_begin = 1, day_begin = 1) {
@@ -942,7 +947,7 @@ export default {
         body: JSON.stringify(body)
       };
       let data = await d3.json(test_url, request);
-      // console.log(data.args.rsp, month_begin, day_begin);
+      // console.log('hubei', data.args.rsp);
       let hubei_dataset = [];
       data.args.rsp.areaHistory.forEach(d => {
         let day = +d["day"].split(".")[1];
@@ -1035,6 +1040,7 @@ export default {
         this.getHubeiDataset(url),
         // this.getWuhanDataset(url)
       ]).then(d => {
+        // console.log('d', d)
         // this.dataLens = Math.min(d[0].length, d[1].length, d[2].length);
         this.dataLens = Math.min(d[0].length, d[1].length);
 
