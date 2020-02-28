@@ -264,7 +264,7 @@
           <div
             v-for="(label, index) in add_y_label"
             :style="`margin-bottom: ${
-              index===0 ? 14.8 : 3.8
+              index===0 ? 14.8 : 4.5
             }vw; font-weight: ${label === 0 ? 600 : 400};`"
             :key="`${label}-${index}`"
           >{{num2text(label)}}{{index===0 ? '%':''}}</div>
