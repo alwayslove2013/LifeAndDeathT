@@ -229,12 +229,12 @@
         </div>
         <div class="legend_part">
           <div class="icon_line_death" />
-          <div class="death icon" />
+          <div class="death icon_line" />
           <div class="legend_text">死亡率</div>
         </div>
         <div class="legend_part">
           <div class="icon_line_cure" />
-          <div class="cure icon" />
+          <div class="cure icon_line" />
           <div class="legend_text">治愈率</div>
         </div>
       </div>
@@ -1538,16 +1538,23 @@ export default {
         margin-top: 4 /7.5vw;
         border-radius: 0.4vw;
       }
+      .icon_line {
+        width: 12 /7.5vw;
+        height: 12 /7.5vw;
+        float: left;
+        margin-top: 8 /7.5vw;
+        border-radius: 0.2vw;
+      }
       .icon_line_cure {
         float: left;
         width: 31/7.5vw;
-        height: 1.6vw;
+        height: 1.7vw;
         border-bottom: 1.5/7.5vw dashed #62c298;
       }
       .icon_line_death {
         float: left;
         width: 31/7.5vw;
-        height: 1.6vw;
+        height: 1.7vw;
         border-bottom: 1.5/7.5vw dashed #535b65;
       }
     }
