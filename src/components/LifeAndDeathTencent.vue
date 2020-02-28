@@ -1378,7 +1378,7 @@ export default {
     }
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollTop + 1)
-    }, 1000)
+    }, 500)
   }
 };
 </script>
