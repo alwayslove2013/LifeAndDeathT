@@ -1521,7 +1521,8 @@ export default {
 #add {
   #legend {
     margin-top: 4vw;
-    height: 20 /7.5vw;
+    height: 25 /7.5vw;
+    // border: 1px solid red;
     .legend_part {
       float: right;
       margin-left: 1.5vw;
@@ -1651,7 +1652,7 @@ export default {
       float: left;
       width: 88%;
       height: 100%;
-      // background: rgba(142, 170, 142, 0.1);
+      background: rgba(142, 170, 142, 0.1);
       overflow-x: scroll;
       overflow-y: hidden;
       // -webkit-overflow-scrolling: touch;
@@ -1665,6 +1666,7 @@ export default {
         position: absolute;
         width: 100%;
         height: 70vw;
+        border: 1px solid red;
         // overflow: hidden;
         // background: rgba(133, 113, 113, 0.3);
       }
