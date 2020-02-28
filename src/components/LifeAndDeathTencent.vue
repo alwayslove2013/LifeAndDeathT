@@ -289,7 +289,7 @@
           </div>
           <div
             class="life_svg_div_big"
-            :style="`height: 100%; width: ${dataLens / showLens * 100}%; border: 1px solid red;`"
+            :style="`height: 100%; width: ${dataLens / showLens * 100}%;`"
           >
             <svg width="100%" height="100%" style="background: none;">
               <!-- <defs>
@@ -1377,8 +1377,8 @@ export default {
       this.isiOS = 1;
     }
     setTimeout(() => {
-      window.scrollTo(0, document.body.scrollTop + 100)
-    }, 1000)
+      window.scrollTo(0, document.body.scrollTop + 1)
+    }, 100)
   }
 };
 </script>
@@ -1525,7 +1525,7 @@ export default {
   #legend {
     margin-top: 4vw;
     height: 25 /7.5vw;
-    border: 1px solid red;
+    // border: 1px solid red;
     .legend_part {
       float: right;
       margin-left: 1.5vw;
@@ -1586,7 +1586,7 @@ export default {
       float: left;
       width: 88%;
       height: 100%;
-      background: rgba(142, 170, 142, 0.1);
+      // background: rgba(142, 170, 142, 0.1);
       overflow-x: scroll;
       overflow-y: hidden;
       // -webkit-overflow-scrolling: touch;
