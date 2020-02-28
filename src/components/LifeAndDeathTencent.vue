@@ -218,7 +218,27 @@
 
     <div id="add" style="margin-top: 6.67vw;">
       <div class="title">全国新增治愈/死亡病例数</div>
-      <div id="legend" style="margin-top: 3vw;">
+      <div id="legend">
+        <div class="legend_part">
+          <div class="death icon" />
+          <div class="legend_text">死亡人数</div>
+        </div>
+        <div class="legend_part">
+          <div class="cure icon" />
+          <div class="legend_text">治愈人数</div>
+        </div>
+        <div class="legend_part">
+          <div class="icon_line_death" />
+          <div class="death icon" />
+          <div class="legend_text">死亡率</div>
+        </div>
+        <div class="legend_part">
+          <div class="icon_line_cure" />
+          <div class="cure icon" />
+          <div class="legend_text">治愈率</div>
+        </div>
+      </div>
+      <!-- <div id="legend" style="margin-top: 3vw;">
         <div class="legend_part">
           <div class="legend_line_cure"></div>
           <div class="legend_icon_line cure"></div>
@@ -237,7 +257,7 @@
           <div class="legend_icon death"></div>
           <div class="legend_text">新增死亡</div>
         </div>
-      </div>
+      </div> -->
 
       <div class="life_div">
         <div class="y_label">
@@ -411,7 +431,7 @@
             </svg>
           </div>
         </div>
-      </div>
+      </template>
 
       <div id="slider">
         <svg id="slider_svg" width="100%" height="100%">
@@ -436,7 +456,7 @@
       <div
         class="description"
         style="margin-left: 3vw; margin-bottom: 5vw;"
-      >*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div>
+      >*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</template>
       <!-- <div id="footer" style="height: 10vw;">
         <p>scroll-left: {{scroll_left}}; isIOS: {{isiOS}}</p>
         <p>select_date_id: {{select_date_id}}</p>
@@ -1500,74 +1520,107 @@ export default {
 
 #add {
   #legend {
-    margin-left: 15%;
-    width: 80%;
-    height: 6vw;
-    // background: rgba(142, 170, 142, 0.1);
+    margin-top: 4vw;
+    height: 20 /7.5vw;
     .legend_part {
-      vertical-align: middle;
-      // text-align: center;
-      position: relative;
-      width: 25%;
-      height: 100%;
-      display: inline-block;
-    }
-    .legend_line_cure {
-      position: absolute;
-      top: 48%;
-      left: 4vw;
-      transform: translateY(-50%);
-      width: 4vw;
-      height: 0.2vw;
-      border-bottom: 0.3vw dashed #62c298;
-    }
-    .legend_line_death {
-      position: absolute;
-      top: 48%;
-      left: 4vw;
-      transform: translateY(-50%);
-      width: 4vw;
-      height: 0.2vw;
-      border-bottom: 0.3vw dashed #535b65;
-    }
-    .legend_icon_line {
-      position: absolute;
-      top: 50%;
-      left: 8vw;
-      transform: translateY(-50%);
-      width: 1.6vw;
-      height: 1.8vw;
-      border-radius: 0.4vw;
-    }
-    .legend_text_line {
-      position: absolute;
-      top: 50%;
-      left: 11vw;
-      transform: translateY(-50%);
-      font-size: 2.5vw;
-      line-height: 2.8vw;
-      height: 3vw;
-      width: 12vw;
-    }
-    .legend_icon {
-      position: absolute;
-      top: 50%;
-      left: 5vw;
-      transform: translateY(-50%);
-      width: 2vw;
-      height: 2vw;
-      border-radius: 0.4vw;
-    }
-    .legend_text {
-      position: absolute;
-      top: 50%;
-      left: 8vw;
-      transform: translateY(-50%);
-      font-size: 2.5vw;
-      line-height: 2.8vw;
-      width: 12vw;
+      float: right;
+      margin-left: 1.5vw;
+      .legend_text {
+        float: left;
+        margin-left: 1.5vw;
+        font-size: 20 /7.5vw;
+        margin-right: 2vw;
+      }
+      .icon {
+        width: 18 /7.5vw;
+        height: 18 /7.5vw;
+        float: left;
+        margin-top: 4 /7.5vw;
+        border-radius: 0.4vw;
+      }
+      .icon_line_cure {
+        float: left;
+        width: 31/7.5vw;
+        height: 1.6vw;
+        border-bottom: 1.5/7.5vw dashed #62c298;
+      }
+      .icon_line_death {
+        float: left;
+        width: 31/7.5vw;
+        height: 1.6vw;
+        border-bottom: 1.5/7.5vw dashed #535b65;
+      }
     }
   }
+  // #legend {
+  //   margin-left: 15%;
+  //   width: 80%;
+  //   height: 6vw;
+  //   // background: rgba(142, 170, 142, 0.1);
+  //   .legend_part {
+  //     vertical-align: middle;
+  //     // text-align: center;
+  //     position: relative;
+  //     width: 25%;
+  //     height: 100%;
+  //     display: inline-block;
+  //   }
+  //   .legend_line_cure {
+  //     position: absolute;
+  //     top: 48%;
+  //     left: 4vw;
+  //     transform: translateY(-50%);
+  //     width: 4vw;
+  //     height: 0.2vw;
+  //     border-bottom: 0.3vw dashed #62c298;
+  //   }
+  //   .legend_line_death {
+  //     position: absolute;
+  //     top: 48%;
+  //     left: 4vw;
+  //     transform: translateY(-50%);
+  //     width: 4vw;
+  //     height: 0.2vw;
+  //     border-bottom: 0.3vw dashed #535b65;
+  //   }
+  //   .legend_icon_line {
+  //     position: absolute;
+  //     top: 50%;
+  //     left: 8vw;
+  //     transform: translateY(-50%);
+  //     width: 1.6vw;
+  //     height: 1.8vw;
+  //     border-radius: 0.4vw;
+  //   }
+  //   .legend_text_line {
+  //     position: absolute;
+  //     top: 50%;
+  //     left: 11vw;
+  //     transform: translateY(-50%);
+  //     font-size: 2.5vw;
+  //     line-height: 2.8vw;
+  //     height: 3vw;
+  //     width: 12vw;
+  //   }
+  //   .legend_icon {
+  //     position: absolute;
+  //     top: 50%;
+  //     left: 5vw;
+  //     transform: translateY(-50%);
+  //     width: 2.4vw;
+  //     height: 2.4vw;
+  //     border-radius: 0.4vw;
+  //   }
+  //   .legend_text {
+  //     position: absolute;
+  //     top: 50%;
+  //     left: 8vw;
+  //     transform: translateY(-50%);
+  //     font-size: 2.5vw;
+  //     line-height: 2.8vw;
+  //     width: 12vw;
+  //   }
+  // }
   .life_div {
     margin-top: 0;
     width: 100%;
