@@ -289,7 +289,7 @@
           </div>
           <div
             class="life_svg_div_big"
-            :style="`height: 100%; width: ${dataLens / showLens * 100}%`"
+            :style="`height: 100%; width: ${dataLens / showLens * 100}%; border: 1px solid red;`"
           >
             <svg width="100%" height="100%" style="background: none;">
               <!-- <defs>
@@ -1377,8 +1377,8 @@ export default {
       this.isiOS = 1;
     }
     setTimeout(() => {
-      window.scrollTo(0, document.body.scrollTop + 1)
-    }, 100)
+      window.scrollTo(0, document.body.scrollTop + 100)
+    }, 1000)
   }
 };
 </script>
@@ -1600,7 +1600,6 @@ export default {
         position: absolute;
         width: 100%;
         height: 70vw;
-        border: 1px solid red;
         // overflow: hidden;
         // background: rgba(133, 113, 113, 0.3);
       }
