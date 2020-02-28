@@ -1376,6 +1376,9 @@ export default {
     if (isIOS) {
       this.isiOS = 1;
     }
+    setTimeout(() => {
+      window.scrollTo(0, document.body.scrollTop + 1)
+    }, 100)
   }
 };
 </script>
@@ -1522,7 +1525,7 @@ export default {
   #legend {
     margin-top: 4vw;
     height: 25 /7.5vw;
-    // border: 1px solid red;
+    border: 1px solid red;
     .legend_part {
       float: right;
       margin-left: 1.5vw;
@@ -1560,75 +1563,6 @@ export default {
       }
     }
   }
-  // #legend {
-  //   margin-left: 15%;
-  //   width: 80%;
-  //   height: 6vw;
-  //   // background: rgba(142, 170, 142, 0.1);
-  //   .legend_part {
-  //     vertical-align: middle;
-  //     // text-align: center;
-  //     position: relative;
-  //     width: 25%;
-  //     height: 100%;
-  //     display: inline-block;
-  //   }
-  //   .legend_line_cure {
-  //     position: absolute;
-  //     top: 48%;
-  //     left: 4vw;
-  //     transform: translateY(-50%);
-  //     width: 4vw;
-  //     height: 0.2vw;
-  //     border-bottom: 0.3vw dashed #62c298;
-  //   }
-  //   .legend_line_death {
-  //     position: absolute;
-  //     top: 48%;
-  //     left: 4vw;
-  //     transform: translateY(-50%);
-  //     width: 4vw;
-  //     height: 0.2vw;
-  //     border-bottom: 0.3vw dashed #535b65;
-  //   }
-  //   .legend_icon_line {
-  //     position: absolute;
-  //     top: 50%;
-  //     left: 8vw;
-  //     transform: translateY(-50%);
-  //     width: 1.6vw;
-  //     height: 1.8vw;
-  //     border-radius: 0.4vw;
-  //   }
-  //   .legend_text_line {
-  //     position: absolute;
-  //     top: 50%;
-  //     left: 11vw;
-  //     transform: translateY(-50%);
-  //     font-size: 2.5vw;
-  //     line-height: 2.8vw;
-  //     height: 3vw;
-  //     width: 12vw;
-  //   }
-  //   .legend_icon {
-  //     position: absolute;
-  //     top: 50%;
-  //     left: 5vw;
-  //     transform: translateY(-50%);
-  //     width: 2.4vw;
-  //     height: 2.4vw;
-  //     border-radius: 0.4vw;
-  //   }
-  //   .legend_text {
-  //     position: absolute;
-  //     top: 50%;
-  //     left: 8vw;
-  //     transform: translateY(-50%);
-  //     font-size: 2.5vw;
-  //     line-height: 2.8vw;
-  //     width: 12vw;
-  //   }
-  // }
   .life_div {
     margin-top: 0;
     width: 100%;
