@@ -431,7 +431,7 @@
             </svg>
           </div>
         </div>
-      </template>
+      </div>
 
       <div id="slider">
         <svg id="slider_svg" width="100%" height="100%">
@@ -456,7 +456,7 @@
       <div
         class="description"
         style="margin-left: 3vw; margin-bottom: 5vw;"
-      >*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</template>
+      >*拖动图表查看更多时间范围数据，移动滑块选择日期，图表将同步变化</div>
       <!-- <div id="footer" style="height: 10vw;">
         <p>scroll-left: {{scroll_left}}; isIOS: {{isiOS}}</p>
         <p>select_date_id: {{select_date_id}}</p>
