@@ -661,13 +661,16 @@ export default {
         if (gap_left > gap_right) {
           gap_right = Math.max(Math.ceil(gap_left / 1000) * 1000, max - 10000);
         }
-        if (gap_left < gap_right) {
-          gap_right =
-            gap_right > 1000 ? Math.floor(gap_right / 1000) * 1000 : 500;
-        }
-        if (gap_left === gap_right) {
-          gap_left += 1000;
-          gap_right = Math.max(Math.ceil(gap_left / 1000) * 1000, max - 10000);
+        // if (gap_left < gap_right) {
+        //   gap_right =
+        //     gap_right > 1000 ? Math.floor(gap_right / 1000) * 1000 : 500;
+        // }
+        // if (gap_left === gap_right) {
+        //   gap_right += 1000;
+        //   // gap_right = Math.max(Math.ceil(gap_left / 1000) * 1000, max - 10000);
+        // }
+        if (gap_left >= gap_right) {
+          gap_right = gap_left + 1000;
         }
         max = Math.max(max, gap_right);
         // console.log(gap_left, gap_right, max);
